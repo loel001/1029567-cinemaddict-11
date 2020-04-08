@@ -4,8 +4,6 @@ import {createStatisticsTemplate} from "./components/statistics";
 import {createSortingTemplate} from "./components/sorting";
 import {createFilmCardTemplate} from "./components/film-card";
 import {createLoadMoreButtonTemplate} from "./components/load-more-button";
-import {createTopRatedFilmCardTemplate} from "./components/top-rated-film-card";
-import {createMostCommentedFilmCardTemplate} from "./components/most-commented-film-card";
 import {createMovieDetailsFilmTemplate} from "./components/movie-details-film";
 
 const TOTAL_NUMBER_OF_CARDS = 5;
@@ -44,9 +42,9 @@ const cardTopRatedWrappers = document.querySelectorAll(`.films-list--extra .film
 // Карточки фильма в блоке «Top rated»
 // Карточки фильма в блоке «Most commented»
 for (let i = 0; i < NUMBER_OF_CARDS; i++) {
-  render(cardTopRatedWrappers[0], createTopRatedFilmCardTemplate(), `beforeend`);
-  render(cardTopRatedWrappers[1], createMostCommentedFilmCardTemplate(), `beforeend`);
+  render(cardTopRatedWrappers[0], createFilmCardTemplate(), `beforeend`);
+  render(cardTopRatedWrappers[1], createFilmCardTemplate(), `beforeend`);
 }
 
-// временная вставка попапа---
-render(basementSite, createMovieDetailsFilmTemplate(), `afterend`);
+// временная вставка попапа
+// render(basementSite, createMovieDetailsFilmTemplate(), `afterend`);
