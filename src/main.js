@@ -1,11 +1,12 @@
 import {createBasicMarkupTemplate} from "./components/basic-markup";
-import {createSiteProfileTemplate} from "./components/user-rank";
-import {createSiteMenuTemplate} from "./components/menu";
-import {createFilmCardTemplate} from "./components/movie-cards";
-import {createLoadMoreButtonTemplate} from "./components/movie-button";
-import {createTopRatedFilmCardTemplate} from "./components/popular-movie-cards";
-import {createMostCommentedFilmCardTemplate} from "./components/commented-movie-cards";
-import {createMovieDetailsFilmTemplate} from "./components/movie-info-popup";
+import {createSiteProfileTemplate} from "./components/site-profile";
+import {createStatisticsTemplate} from "./components/statistics";
+import {createSortingTemplate} from "./components/sorting";
+import {createFilmCardTemplate} from "./components/film-card";
+import {createLoadMoreButtonTemplate} from "./components/load-more-button";
+import {createTopRatedFilmCardTemplate} from "./components/top-rated-film-card";
+import {createMostCommentedFilmCardTemplate} from "./components/most-commented-film-card";
+import {createMovieDetailsFilmTemplate} from "./components/movie-details-film";
 
 const TOTAL_NUMBER_OF_CARDS = 5;
 const NUMBER_OF_CARDS = 2;
@@ -20,8 +21,11 @@ const render = (container, template, place) => {
 // профайл
 render(siteHeader, createSiteProfileTemplate(), `beforeend`);
 
-// Меню (фильтры и статистика)
-render(siteMain, createSiteMenuTemplate(), `beforeend`);
+// статистика
+render(siteMain, createStatisticsTemplate(), `beforeend`);
+
+// сортировка (фильтры)
+render(siteMain, createSortingTemplate(), `beforeend`);
 
 // основная разметка
 render(siteMain, createBasicMarkupTemplate(), `beforeend`);
