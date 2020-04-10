@@ -1,14 +1,25 @@
-const createCommentsMarkup = () => {
+const createGenresMarkup = (genres) => {
+  return genres
+    .map((genre) => {
+      return (
+        `<span class="film-details__genre">${genre}</span>`
+      );
+    })
+    .join(`\n`);
+};
+
+const createCommentsMarkup = (comment) => {
+  const {commentEmoji, commentText, commentAuthor, commentDay} = comment;
   return (
     `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
-        <img src="./images/emoji/smile.png" width="55" height="55" alt="emoji-smile">
+        <img src="./images/emoji/${commentEmoji}.png" width="55" height="55" alt="emoji-${commentEmoji}">
       </span>
       <div>
-        <p class="film-details__comment-text">Interesting setting and a good cast</p>
+        <p class="film-details__comment-text">${commentText}</p>
         <p class="film-details__comment-info">
-          <span class="film-details__comment-author">Tim Macoveev</span>
-          <span class="film-details__comment-day">2019/12/31 23:59</span>
+          <span class="film-details__comment-author">${commentAuthor}</span>
+          <span class="film-details__comment-day">${commentDay}</span>
           <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>
@@ -16,10 +27,25 @@ const createCommentsMarkup = () => {
   );
 };
 
-export const createMovieDetailsFilmTemplate = (film) => {
-  const {movieTitle, rating, duration, poster, description, comment} = film;
+const createEmojiListMarkup = (emojiNames) => {
+  return emojiNames
+    .map((emojiName) => {
+      return (
+        `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emojiName}" value="${emojiName}">
+          <label class="film-details__emoji-label" for="emoji-${emojiName}">
+            <img src="./images/emoji/${emojiName}.png" width="30" height="30" alt="emoji">
+          </label>`
+      );
+    })
+    .join(`\n`);
+};
 
-  const commentsMarkup = createCommentsMarkup();
+export const createMovieDetailsFilmTemplate = (film, comment) => {
+  const {poster, movieTitle, age, director, writers, actors, rating, duration, country, genreTerm, genreNames, emojiNames, description, com} = film;
+
+  const commentsMarkup = createCommentsMarkup(comment);
+  const genresMarkup = createGenresMarkup(genreNames);
+  const emojiListMarkup = createEmojiListMarkup(emojiNames);
 
   return (
     `<section class="film-details">
@@ -32,7 +58,7 @@ export const createMovieDetailsFilmTemplate = (film) => {
         <div class="film-details__poster">
           <img class="film-details__poster-img" src="./images/posters/${poster}" alt="${movieTitle}">
 
-          <p class="film-details__age">18+</p>
+          <p class="film-details__age">${age}+</p>
         </div>
 
         <div class="film-details__info">
@@ -50,15 +76,15 @@ export const createMovieDetailsFilmTemplate = (film) => {
           <table class="film-details__table">
             <tr class="film-details__row">
               <td class="film-details__term">Director</td>
-              <td class="film-details__cell">Anthony Mann</td>
+              <td class="film-details__cell">${director}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">Anne Wigton, Heinz Herald, Richard Weil</td>
+              <td class="film-details__cell">${writers}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">Erich von Stroheim, Mary Beth Hughes, Dan Duryea</td>
+              <td class="film-details__cell">${actors}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
@@ -70,14 +96,13 @@ export const createMovieDetailsFilmTemplate = (film) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
-              <td class="film-details__cell">USA</td>
+              <td class="film-details__cell">${country}</td>
             </tr>
             <tr class="film-details__row">
-              <td class="film-details__term">Genres</td>
+              <td class="film-details__term">${genreTerm}</td>
               <td class="film-details__cell">
-                <span class="film-details__genre">Drama</span>
-                <span class="film-details__genre">Film-Noir</span>
-                <span class="film-details__genre">Mystery</span></td>
+                ${genresMarkup}
+               </td>
             </tr>
           </table>
 
@@ -101,7 +126,7 @@ export const createMovieDetailsFilmTemplate = (film) => {
 
     <div class="form-details__bottom-container">
       <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comment}</span></h3>
+        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${com}</span></h3>
 
         <ul class="film-details__comments-list">
           ${commentsMarkup}
@@ -115,30 +140,12 @@ export const createMovieDetailsFilmTemplate = (film) => {
           </label>
 
           <div class="film-details__emoji-list">
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
-            <label class="film-details__emoji-label" for="emoji-smile">
-              <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
-            <label class="film-details__emoji-label" for="emoji-sleeping">
-              <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
-            <label class="film-details__emoji-label" for="emoji-puke">
-              <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
-            <label class="film-details__emoji-label" for="emoji-angry">
-              <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
-            </label>
+            ${emojiListMarkup}
           </div>
         </div>
       </section>
     </div>
   </form>
-</section>`
+  </section>`
   );
 };

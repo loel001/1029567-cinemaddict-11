@@ -26,16 +26,30 @@ const getNewDescriptions = () => {
   return array.join(` `).toString();
 };
 
+const writers = [`Anne Wigton`, `Heinz Herald`, `Richard Weil`].join(`, `).toString();
+const actors = [`Erich von Stroheim`, `Mary Beth Hughes`, `Dan Duryea`].join(`, `).toString();
+const genreNames = [`Drama`, `Film-Noir`, `Mystery`];
+const genreTerm = genreNames.length > 1 ? `Genres` : `Genre`;
+const genres = [`Drama`, `Film-Noir`, `Mystery`].join(` `).toString();
+
 const generateFilmCard = () => {
   return {
     movieTitle: `The Dance of Life`,
+    age: `18`,
+    director: `Anthony Mann`,
+    writers,
+    actors,
     rating: `8.3`,
     year: `1929`,
     duration: `1h 55m`,
-    genre: `genre`,
+    genreNames,
+    genreTerm,
+    genres,
+    emojiNames: [`smile`, `sleeping`, `puke`, `angry`],
     poster: `the-dance-of-life.jpg`,
     description: getNewDescriptions(),
-    comment: `5`,
+    country: `USA`,
+    com: `5`,
   };
 };
 

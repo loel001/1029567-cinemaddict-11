@@ -6,6 +6,7 @@ import {createFilmCardTemplate} from "./components/film-card";
 import {createLoadMoreButtonTemplate} from "./components/load-more-button";
 import {createMovieDetailsFilmTemplate} from "./components/movie-details-film";
 import {generateFilters} from "./mock/filter";
+import {generateComments} from "./mock/comment";
 import {generateFilmCards} from "./mock/film-card";
 
 const NUMBER_OF_FILMS = 17;
@@ -21,6 +22,7 @@ const render = (container, template, place) => {
 
 const filters = generateFilters();
 const films = generateFilmCards(NUMBER_OF_FILMS);
+const comments = generateComments(NUMBER_OF_FILMS);
 
 // профайл
 render(siteHeader, createSiteProfileTemplate(), `beforeend`);
@@ -37,9 +39,8 @@ render(siteMain, createBasicMarkupTemplate(), `beforeend`);
 const cardWrapper = document.querySelector(`.films-list .films-list__container`);
 // карточка фильма
 let showingCards = TOTAL_NUMBER_OF_CARDS;
-for (let i = 0; i < showingCards; i++) {
-  render(cardWrapper, createFilmCardTemplate(films[i]), `beforeend`);
-}
+films.slice(0, showingCards)
+  .forEach((film) => render(cardWrapper, createFilmCardTemplate(film), `beforeend`));
 
 const filmWrapper = document.querySelector(`.films-list`);
 // кнопка показать больше
@@ -69,4 +70,4 @@ loadMoreButton.addEventListener(`click`, () => {
 });
 
 // временная вставка попапа
-render(basementSite, createMovieDetailsFilmTemplate(films[0]), `afterend`);
+render(basementSite, createMovieDetailsFilmTemplate(films[0], comments[0]), `afterend`);
