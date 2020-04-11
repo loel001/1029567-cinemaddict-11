@@ -4,9 +4,7 @@ import {createFilterTemplate} from "./components/filter";
 import {createSortingTemplate} from "./components/sorting";
 import {createFilmCardTemplate} from "./components/film-card";
 import {createLoadMoreButtonTemplate} from "./components/load-more-button";
-import {createMovieDetailsFilmTemplate} from "./components/movie-details-film";
-import {generateFilters} from "./mock/filter";
-import {generateComments} from "./mock/comment";
+import {createFilmDetailsTemplate} from "./components/film-details";
 import {generateFilmCards} from "./mock/film-card";
 
 const NUMBER_OF_FILMS = 17;
@@ -20,15 +18,14 @@ const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-const filters = generateFilters();
+// const filters = generateFilters();
 const films = generateFilmCards(NUMBER_OF_FILMS);
-const comments = generateComments(NUMBER_OF_FILMS);
 
 // профайл
 render(siteHeader, createSiteProfileTemplate(), `beforeend`);
 
 // статистика(фильтры)
-render(siteMain, createFilterTemplate(filters), `beforeend`);
+render(siteMain, createFilterTemplate(films), `beforeend`);
 
 // сортировка (фильтры)
 render(siteMain, createSortingTemplate(), `beforeend`);
@@ -70,4 +67,4 @@ loadMoreButton.addEventListener(`click`, () => {
 });
 
 // временная вставка попапа
-render(basementSite, createMovieDetailsFilmTemplate(films[0], comments[0]), `afterend`);
+render(basementSite, createFilmDetailsTemplate(films[0]), `afterend`);

@@ -1,3 +1,5 @@
+import {emojiNames} from "../const";
+
 const createGenresMarkup = (genres) => {
   return genres
     .map((genre) => {
@@ -8,27 +10,30 @@ const createGenresMarkup = (genres) => {
     .join(`\n`);
 };
 
-const createCommentsMarkup = (comment) => {
-  const {commentEmoji, commentText, commentAuthor, commentDay} = comment;
-  return (
-    `<li class="film-details__comment">
-      <span class="film-details__comment-emoji">
-        <img src="./images/emoji/${commentEmoji}.png" width="55" height="55" alt="emoji-${commentEmoji}">
-      </span>
-      <div>
-        <p class="film-details__comment-text">${commentText}</p>
-        <p class="film-details__comment-info">
-          <span class="film-details__comment-author">${commentAuthor}</span>
-          <span class="film-details__comment-day">${commentDay}</span>
-          <button class="film-details__comment-delete">Delete</button>
-        </p>
-      </div>
-    </li>`
-  );
+const createCommentsMarkup = (comments) => {
+  return comments
+    .map((comment) => {
+      return (
+        `<li class="film-details__comment">
+          <span class="film-details__comment-emoji">
+            <img src="./images/emoji/${comment.emoji}.png" width="55" height="55" alt="emoji-${comment.emoji}">
+          </span>
+          <div>
+            <p class="film-details__comment-text">${comment.text}</p>
+            <p class="film-details__comment-info">
+              <span class="film-details__comment-author">${comment.author}</span>
+              <span class="film-details__comment-day">${comment.day}</span>
+              <button class="film-details__comment-delete">Delete</button>
+            </p>
+          </div>
+        </li>`
+      );
+    })
+    .join(`\n`);
 };
 
-const createEmojiListMarkup = (emojiNames) => {
-  return emojiNames
+const createEmojiListMarkup = (names) => {
+  return names
     .map((emojiName) => {
       return (
         `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emojiName}" value="${emojiName}">
@@ -40,12 +45,38 @@ const createEmojiListMarkup = (emojiNames) => {
     .join(`\n`);
 };
 
-export const createMovieDetailsFilmTemplate = (film, comment) => {
-  const {poster, movieTitle, age, director, writers, actors, rating, duration, country, genreTerm, genreNames, emojiNames, description, com} = film;
+const createCommentsWrapMarkup = (comments, commentsMarkup, emojiListMarkup) => {
+  return (
+    `<section class="film-details__comments-wrap">
+        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
-  const commentsMarkup = createCommentsMarkup(comment);
+        <ul class="film-details__comments-list">
+          ${commentsMarkup}
+        </ul>
+
+        <div class="film-details__new-comment">
+          <div for="add-emoji" class="film-details__add-emoji-label"></div>
+
+          <label class="film-details__comment-label">
+            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+          </label>
+
+          <div class="film-details__emoji-list">
+            ${emojiListMarkup}
+          </div>
+        </div>
+      </section>`
+  );
+};
+
+export const createFilmDetailsTemplate = (film) => {
+  const {poster, movieTitle, age, director, writers, actors, rating, date, duration, country, genreNames, description, comments} = film;
+
+  const commentsMarkup = createCommentsMarkup(comments);
   const genresMarkup = createGenresMarkup(genreNames);
   const emojiListMarkup = createEmojiListMarkup(emojiNames);
+  const commentsWrapMarkup = createCommentsWrapMarkup(comments, commentsMarkup, emojiListMarkup);
+  const genreTerm = genreNames.length > 1 ? `Genres` : `Genre`;
 
   return (
     `<section class="film-details">
@@ -88,7 +119,7 @@ export const createMovieDetailsFilmTemplate = (film, comment) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">30 March 1945</td>
+              <td class="film-details__cell">${date.getDate()} ${date.getMonth()} ${date.getFullYear()}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
@@ -125,25 +156,7 @@ export const createMovieDetailsFilmTemplate = (film, comment) => {
     </div>
 
     <div class="form-details__bottom-container">
-      <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${com}</span></h3>
-
-        <ul class="film-details__comments-list">
-          ${commentsMarkup}
-        </ul>
-
-        <div class="film-details__new-comment">
-          <div for="add-emoji" class="film-details__add-emoji-label"></div>
-
-          <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
-          </label>
-
-          <div class="film-details__emoji-list">
-            ${emojiListMarkup}
-          </div>
-        </div>
-      </section>
+      ${commentsWrapMarkup}
     </div>
   </form>
   </section>`

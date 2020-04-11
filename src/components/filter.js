@@ -1,12 +1,23 @@
-const createFilterMarkup = (filter) => {
-  const {name, count} = filter;
-  return (
-    `<a href="#${name}" class="main-navigation__item">${name} <span class="main-navigation__item-count">${count}</span></a>`
-  );
+import {filterNames, cardfilters} from "../const";
+
+const getNameFilter = (array, name) => {
+  return array.filter((element) => {
+    return element[name] === `true`;
+  });
 };
 
-export const createFilterTemplate = (filters) => {
-  const filtersMarkup = filters.map((it) => createFilterMarkup(it)).join(`\n`);
+const createFilterMarkup = (filters, films) => {
+  return filters
+    .map((name, index) => {
+      return (
+        `<a href="#${name}" class="main-navigation__item">${name} <span class="main-navigation__item-count">${getNameFilter(films, cardfilters[index]).length}</span></a>`
+      );
+    })
+    .join(`\n`);
+};
+
+export const createFilterTemplate = (films) => {
+  const filtersMarkup = createFilterMarkup(filterNames, films);
   return (
     `<nav class="main-navigation">
     <div class="main-navigation__items">
