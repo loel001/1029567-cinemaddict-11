@@ -1,3 +1,4 @@
+import {createElement} from "../utils.js";
 import {filterNames, cardfilters} from "../const";
 
 const getNameFilter = (array, name) => {
@@ -16,7 +17,7 @@ const createFilterMarkup = (filters, films) => {
     .join(`\n`);
 };
 
-export const createFilterTemplate = (films) => {
+const createFilterTemplate = (films) => {
   const filtersMarkup = createFilterMarkup(filterNames, films);
   return (
     `<nav class="main-navigation">
@@ -28,3 +29,26 @@ export const createFilterTemplate = (films) => {
   </nav>`
   );
 };
+
+export default class Filter {
+  constructor(films) {
+    this._films = films;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilterTemplate(this._films);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

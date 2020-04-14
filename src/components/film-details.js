@@ -1,3 +1,4 @@
+import {createElement} from "../utils.js";
 import {emojiNames} from "../const";
 
 const createGenresMarkup = (genres) => {
@@ -69,7 +70,7 @@ const createCommentsWrapMarkup = (comments, commentsMarkup, emojiListMarkup) => 
   );
 };
 
-export const createFilmDetailsTemplate = (film) => {
+const createFilmDetailsTemplate = (film) => {
   const {poster, movieTitle, age, director, writers, actors, rating, date, duration, country, genreNames, description, comments} = film;
 
   const commentsMarkup = createCommentsMarkup(comments);
@@ -162,3 +163,27 @@ export const createFilmDetailsTemplate = (film) => {
   </section>`
   );
 };
+
+export default class FilmDetails {
+  constructor(film) {
+    this._film = film;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmDetailsTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
