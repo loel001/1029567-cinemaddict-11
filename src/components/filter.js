@@ -2,7 +2,7 @@ import {filterNames, cardfilters} from "../const";
 
 const getNameFilter = (array, name) => {
   return array.filter((element) => {
-    return element[name] === `true`;
+    return element[name] === true;
   });
 };
 

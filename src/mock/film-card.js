@@ -20,11 +20,20 @@ const getRandomRating = (min, max) => {
   return ((Math.random() * (max - min + 1)) + min). toPrecision(2);
 };
 
-const getNewArray = (ar) => {
+const getNewArrayDescription = (ar) => {
   const array = [];
   const newLength = ar.length - 4;
   const j = getRandomInRange(0, newLength);
   for (let i = j; i <= j + getRandomInRange(0, 5); i++) {
+    array.push(ar[i]);
+  }
+  return array;
+};
+
+const getNewArray = (ar) => {
+  const array = [];
+  const newLength = ar.length - 1;
+  for (let i = 0; i <= getRandomInRange(0, newLength); i++) {
     array.push(ar[i]);
   }
   return array;
@@ -63,25 +72,24 @@ const comments = [{
 const startDate = new Date(1920, 1, 1).getTime();
 const finalDate = new Date(2020, 3, 1).getTime();
 const durations = [`1h 20m`, `2h 15m`, `1h 45m`];
-const booleanValues = [`true`, `false`];
 
 const generateFilmCard = () => {
   return {
     movieTitle: movieTitles[getRandomInRange(0, movieTitles.length - 1)],
     age: ages[getRandomInRange(0, ages.length - 1)],
     director: directors[getRandomInRange(0, directors.length - 1)],
-    writers: getNewArray(writers).join(`, `).toString(),
-    actors: getNewArray(actors).join(`, `).toString(),
+    writers: getNewArray(writers).join(`, `),
+    actors: getNewArray(actors).join(`, `),
     rating: getRandomRating(1, 9),
     date: new Date(getRandomInRange(startDate, finalDate)),
     genreNames: getNewArray(popupGenres),
     poster: posters[getRandomInRange(0, posters.length - 1)],
-    description: getNewArray(descriptions).join(` `).toString(),
+    description: getNewArrayDescription(descriptions).join(` `),
     country: countries[getRandomInRange(0, countries.length - 1)],
     comments: getNewArray(comments),
-    isFavorite: booleanValues[getRandomInRange(0, booleanValues.length - 1)],
-    isHistory: booleanValues[getRandomInRange(0, booleanValues.length - 1)],
-    isWatchlist: booleanValues[getRandomInRange(0, booleanValues.length - 1)],
+    isFavorite: Math.random() > 0.5,
+    isHistory: Math.random() > 0.5,
+    isWatchlist: Math.random() > 0.5,
     duration: durations[getRandomInRange(0, durations.length - 1)],
   };
 };
