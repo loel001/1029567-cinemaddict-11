@@ -6,6 +6,7 @@ import FilmCardComponent from "./components/film-card";
 import LoadMoreButtonComponent from "./components/load-more-button";
 import FilmDetailsComponent from "./components/film-details";
 import FilmCardsComponent from "./components/film-cards";
+import NoFilmCards from "./components/no-film-cards";
 import {generateFilmCards} from "./mock/film-card";
 import {render, RenderPosition} from "./utils";
 
@@ -13,24 +14,23 @@ const NUMBER_OF_FILMS = 17;
 const TOTAL_NUMBER_OF_CARDS = 5;
 const NUMBER_OF_CARDS = 2;
 
-// const basementSite = document.querySelector(`.footer`);
-
 const renderFilmCard = (filmListElement, film) => {
-  const replaceFilmCardToDetails = () => {
-    filmListElement.replaceChild(filmDetailsComponent.getElement(), filmCardComponent.getElement());
-  };
-
-  const replaceDetailsToFilmCard = () => {
-    filmListElement.replaceChild(filmCardComponent.getElement(), filmDetailsComponent.getElement());
-  };
-
+  const bodySite = document.querySelector(`body`);
   const onEscKeyDown = (evt) => {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
-      replaceDetailsToFilmCard();
+      bodySite.removeChild(filmDetailsComponent.getElement());
       document.removeEventListener(`keydown`, onEscKeyDown);
     }
+  };
+
+  const onHandlerClick = (element) => {
+    element.addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+      bodySite.appendChild(filmDetailsComponent.getElement());
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
   };
 
   const filmCardComponent = new FilmCardComponent(film);
@@ -38,22 +38,31 @@ const renderFilmCard = (filmListElement, film) => {
 
   render(filmListElement, filmCardComponent.getElement(), RenderPosition.BEFOREEND);
 
-  filmCardComponent._element.addEventListener(`click`, (evt) => {
-    evt.preventDefault();
-    replaceFilmCardToDetails();
-    document.addEventListener(`keydown`, onEscKeyDown);
-  });
+  const poster = filmCardComponent.getElement().querySelector(`.film-card__poster`);
+  const name = filmCardComponent.getElement().querySelector(`.film-card__title`);
+  const comment = filmCardComponent.getElement().querySelector(`.film-card__comments`);
+
+  onHandlerClick(poster);
+  onHandlerClick(name);
+  onHandlerClick(comment);
 
   const detailsClose = filmDetailsComponent.getElement().querySelector(`.film-details__close-btn`);
   detailsClose.addEventListener(`click`, (evt) => {
     evt.preventDefault();
-    replaceDetailsToFilmCard();
+    bodySite.removeChild(filmDetailsComponent.getElement());
     document.removeEventListener(`keydown`, onEscKeyDown);
   });
 };
 
 const renderBasicMarkup = (basicMarkupComponent, films) => {
+  const isAllTasksArchived = films.every((film) => film.isArchive);
   const filmWrapper = document.querySelector(`.films-list`);
+
+  if (isAllTasksArchived) {
+    render(filmWrapper, new NoFilmCards().getElement(), RenderPosition.BEFOREEND);
+    return;
+  }
+
   render(filmWrapper, new FilmCardsComponent().getElement(), RenderPosition.BEFOREEND);
 
   const filmListElement = basicMarkupComponent.getElement().querySelector(`.films-list .films-list__container`);
