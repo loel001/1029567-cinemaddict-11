@@ -2,6 +2,7 @@ import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
 import {remove, render, RenderPosition} from "../utils/render";
 import NoFilmCards from "../components/no-film-cards";
+import SortingComponent, {SortType} from "../components/sorting";
 import FilmCardsComponent from "../components/film-cards";
 import LoadMoreButtonComponent from "../components/load-more-button";
 
@@ -35,6 +36,31 @@ const renderFilmCard = (filmListElement, film) => {
   });
 };
 
+const renderFilmCards = (filmListElement, films) => {
+  films.forEach((film) => {
+    renderFilmCard(filmListElement, film);
+  });
+};
+
+const getSortedFilms = (films, sortType, from, to) => {
+  let sortedFilms = [];
+  const showingFilms = films.slice();
+
+  switch (sortType) {
+    case SortType.DEFAULT:
+      sortedFilms = showingFilms;
+      break;
+    case SortType.DATE_DOWN:
+      sortedFilms = showingFilms.sort((a, b) => b.date - a.date);
+      break;
+    case SortType.RATING_DOWN:
+      sortedFilms = showingFilms.sort((a, b) => b.rating - a.rating);
+      break;
+  }
+
+  return sortedFilms.slice(from, to);
+};
+
 export default class BasicMarkupController {
   constructor(container) {
     this._container = container;
@@ -42,9 +68,31 @@ export default class BasicMarkupController {
     this._noFilmCards = new NoFilmCards();
     this._filmCardsComponent = new FilmCardsComponent();
     this._loadMoreButtonComponent = new LoadMoreButtonComponent();
+    this._sortingComponent = new SortingComponent();
   }
 
   render(films) {
+    const renderLoadMoreButton = () => {
+      if (showingCards >= films.length) {
+        return;
+      }
+      // кнопка показать больше
+      render(filmWrapper, this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
+      // показ карточек фильма по нажатию на кнопку показать больше
+      this._loadMoreButtonComponent.setClickHandler(() => {
+        const prevCards = showingCards;
+        showingCards = showingCards + TOTAL_NUMBER_OF_CARDS;
+
+        const sortedFilms = getSortedFilms(films, this._sortingComponent.getSortType(), prevCards, showingCards);
+
+        renderFilmCards(filmListElement, sortedFilms);
+
+        if (showingCards >= films.length) {
+          remove(this._loadMoreButtonComponent);
+        }
+      });
+    };
+
     const container = this._container.getElement();
 
     const isAllTasksArchived = films.every((film) => film.isArchive);
@@ -55,32 +103,26 @@ export default class BasicMarkupController {
       return;
     }
 
+    // сортировка
+    render(container, this._sortingComponent, RenderPosition.BEFOREBEGIN);
     render(filmWrapper, this._filmCardsComponent, RenderPosition.BEFOREEND);
 
     const filmListElement = container.querySelector(`.films-list .films-list__container`);
     // карточка фильма
     let showingCards = TOTAL_NUMBER_OF_CARDS;
-    films.slice(0, showingCards)
-      .forEach((film) => {
-        renderFilmCard(filmListElement, film);
-      });
+    renderFilmCards(filmListElement, films.slice(0, showingCards));
 
-    // кнопка показать больше
-    render(filmWrapper, this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
+    renderLoadMoreButton();
 
-    // показ карточек фильма по нажатию на кнопку показать больше
-    this._loadMoreButtonComponent.setClickHandler(() => {
-      const prevCards = showingCards;
-      showingCards = showingCards + TOTAL_NUMBER_OF_CARDS;
+    this._sortingComponent.setSortTypeChangeHandler((sortType) => {
+      showingCards = TOTAL_NUMBER_OF_CARDS;
 
-      films.slice(prevCards, showingCards)
-        .forEach((film) => {
-          renderFilmCard(filmListElement, film);
-        });
+      const sortedFilms = getSortedFilms(films, sortType, 0, showingCards);
 
-      if (showingCards >= films.length) {
-        remove(this._loadMoreButtonComponent);
-      }
+      filmListElement.innerHTML = ``;
+
+      renderFilmCards(filmListElement, sortedFilms);
+      renderLoadMoreButton();
     });
 
     const cardTopRatedWrappers = container.querySelectorAll(`.films-list--extra .films-list__container`);

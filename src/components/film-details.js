@@ -78,6 +78,7 @@ const createFilmDetailsTemplate = (film) => {
   const emojiListMarkup = createEmojiListMarkup(emojiNames);
   const commentsWrapMarkup = createCommentsWrapMarkup(comments, commentsMarkup, emojiListMarkup);
   const genreTerm = genreNames.length > 1 ? `Genres` : `Genre`;
+  const year = date.getFullYear();
 
   return (
     `<section class="film-details">
@@ -120,7 +121,7 @@ const createFilmDetailsTemplate = (film) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${date.getDate()} ${date.getMonth()} ${date.getFullYear()}</td>
+              <td class="film-details__cell">${date.getDate()} ${date.getMonth()} ${year}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
