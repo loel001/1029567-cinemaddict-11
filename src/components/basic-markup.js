@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 
 const createBasicMarkupTemplate = () => {
   return (
@@ -21,24 +21,8 @@ const createBasicMarkupTemplate = () => {
   );
 };
 
-export default class BasicMarkup {
-  constructor() {
-    this._element = null;
-  }
-
+export default class BasicMarkup extends AbstractComponent {
   getTemplate() {
     return createBasicMarkupTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
