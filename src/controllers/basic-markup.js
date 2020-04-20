@@ -11,7 +11,7 @@ const NUMBER_OF_CARDS = 2;
 
 const renderFilmCard = (filmListElement, film) => {
   const bodySite = document.querySelector(`body`);
-  const setCloseFilmCard = () => {
+  const closeFilmCard = () => {
     remove(filmDetailsComponent);
     document.removeEventListener(`keydown`, onEscKeyDown);
   };
@@ -19,7 +19,7 @@ const renderFilmCard = (filmListElement, film) => {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
-      setCloseFilmCard();
+      closeFilmCard();
     }
   };
 
@@ -33,8 +33,8 @@ const renderFilmCard = (filmListElement, film) => {
     document.addEventListener(`keydown`, onEscKeyDown);
   });
 
-  filmDetailsComponent.setCloseButtonClickHandler(() => {
-    setCloseFilmCard();
+  filmDetailsComponent.closeButtonClickHandler(() => {
+    closeFilmCard();
   });
 };
 
@@ -79,6 +79,7 @@ export default class BasicMarkupController {
         return;
       }
       // кнопка показать больше
+      remove(this._loadMoreButtonComponent);
       render(filmWrapper, this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
       // показ карточек фильма по нажатию на кнопку показать больше
       this._loadMoreButtonComponent.setClickHandler(() => {
@@ -119,7 +120,7 @@ export default class BasicMarkupController {
     this._sortingComponent.setSortTypeChangeHandler((sortType) => {
       showingCards = TOTAL_NUMBER_OF_CARDS;
 
-      const sortedFilms = getSortedFilms(films, sortType, 0, showingCards);
+      const sortedFilms = getSortedFilms(films, sortType, 0, 5);
 
       filmListElement.innerHTML = ``;
 
