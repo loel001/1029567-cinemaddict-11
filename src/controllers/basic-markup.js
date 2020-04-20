@@ -11,12 +11,15 @@ const NUMBER_OF_CARDS = 2;
 
 const renderFilmCard = (filmListElement, film) => {
   const bodySite = document.querySelector(`body`);
+  const setCloseFilmCard = () => {
+    remove(filmDetailsComponent);
+    document.removeEventListener(`keydown`, onEscKeyDown);
+  };
   const onEscKeyDown = (evt) => {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
-      bodySite.removeChild(filmDetailsComponent.getElement());
-      document.removeEventListener(`keydown`, onEscKeyDown);
+      setCloseFilmCard();
     }
   };
 
@@ -30,9 +33,8 @@ const renderFilmCard = (filmListElement, film) => {
     document.addEventListener(`keydown`, onEscKeyDown);
   });
 
-  filmDetailsComponent.setEditButtonClickHandler(() => {
-    bodySite.removeChild(filmDetailsComponent.getElement());
-    document.removeEventListener(`keydown`, onEscKeyDown);
+  filmDetailsComponent.setCloseButtonClickHandler(() => {
+    setCloseFilmCard();
   });
 };
 
