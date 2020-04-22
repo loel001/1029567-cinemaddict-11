@@ -70,6 +70,13 @@ const createCommentsWrapMarkup = (comments, commentsMarkup, emojiListMarkup) => 
   );
 };
 
+const createButtonMarkup = (name, content, isChecked) => {
+  return (
+    `<input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="${name}" ${isChecked ? `checked` : ``}>
+      <label for="${name}" class="film-details__control-label film-details__control-label--${name}">${content}</label>`
+  );
+};
+
 const createFilmDetailsTemplate = (film) => {
   const {poster, movieTitle, age, director, writers, actors, rating, date, duration, country, genreNames, description, comments} = film;
 
@@ -79,6 +86,9 @@ const createFilmDetailsTemplate = (film) => {
   const commentsWrapMarkup = createCommentsWrapMarkup(comments, commentsMarkup, emojiListMarkup);
   const genreTerm = genreNames.length > 1 ? `Genres` : `Genre`;
   const year = date.getFullYear();
+  const watchlistButton = createButtonMarkup(`watchlist`, `Add-to-watchlist`, film.isWatchlist);
+  const historyButton = createButtonMarkup(`watched`, `Already watched`, film.isHistory);
+  const favoritesButton = createButtonMarkup(`favorite`, `Add to favorites`, film.isFavorite);
 
   return (
     `<section class="film-details">
@@ -146,14 +156,9 @@ const createFilmDetailsTemplate = (film) => {
       </div>
 
       <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
-        <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
-
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
-        <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
-
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
-        <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
+        ${watchlistButton}
+        ${historyButton}
+        ${favoritesButton}
       </section>
     </div>
 
@@ -178,6 +183,21 @@ export default class FilmDetails extends AbstractComponent {
 
   closeButtonClickHandler(handler) {
     this.getElement().querySelector(`.film-details__close-btn`)
+      .addEventListener(`click`, handler);
+  }
+
+  setWatchlistButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-details__control-label--watchlist`)
+      .addEventListener(`click`, handler);
+  }
+
+  setHistoryButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-details__control-label--watched`)
+      .addEventListener(`click`, handler);
+  }
+
+  setFavoritesButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-details__control-label--favorite`)
       .addEventListener(`click`, handler);
   }
 }
