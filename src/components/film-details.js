@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract-component.js";
+import AbstractSmartComponent from "./abstract-smart-component.js";
 import {emojiNames} from "../const";
 
 const createGenresMarkup = (genres) => {
@@ -170,20 +170,49 @@ const createFilmDetailsTemplate = (film) => {
   );
 };
 
-export default class FilmDetails extends AbstractComponent {
+export default class FilmDetails extends AbstractSmartComponent {
   constructor(film) {
     super();
 
     this._film = film;
+    this._clickHandler = null;
+
+    this._subscribeOnEvents();
   }
 
   getTemplate() {
     return createFilmDetailsTemplate(this._film);
   }
 
+  recoveryListeners() {
+    this.closeButtonClickHandler(this._clickHandler);
+    this._subscribeOnEvents();
+  }
+
+  rerender() {
+    super.rerender();
+  }
+
+
   closeButtonClickHandler(handler) {
     this.getElement().querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, handler);
+
+    this._clickHandle = handler;
+  }
+
+  _subscribeOnEvents() {
+    const element = this.getElement();
+
+    element.querySelectorAll(`.film-details__emoji-label`)
+      .forEach((elem) => {
+        elem.addEventListener(`click`, () => {
+          document.querySelector(`.film-details__add-emoji-label`).append(elem.querySelector(`img`));
+          const textComment = element.querySelector(`.film-details__comment-input`).value;
+          document.querySelector(`.film-details__comment-input`).append(textComment);
+          this.rerender();
+        });
+      });
   }
 
   setWatchlistButtonClickHandler(handler) {

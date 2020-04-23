@@ -9,9 +9,9 @@ import LoadMoreButtonComponent from "../components/load-more-button";
 const TOTAL_NUMBER_OF_CARDS = 5;
 const NUMBER_OF_CARDS = 2;
 
-const renderFilmCards = (filmListElement, films) => {
+const renderFilmCards = (filmListElement, films, onDataChange) => {
   return films.map((film) => {
-    const filmCardController = new FilmCardController(filmListElement);
+    const filmCardController = new FilmCardController(filmListElement, onDataChange);
 
     filmCardController.render(film);
 
@@ -49,7 +49,7 @@ export default class BasicMarkupController {
     this._filmCardsComponent = new FilmCardsComponent();
     this._loadMoreButtonComponent = new LoadMoreButtonComponent();
     this._sortingComponent = new SortingComponent();
-
+    this._onDataChange = this._onDataChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
 
     this._sortingComponent.setSortTypeChangeHandler(this._onSortTypeChange);
@@ -72,7 +72,7 @@ export default class BasicMarkupController {
 
     const filmListElement = container.querySelector(`.films-list .films-list__container`);
     // карточка фильма
-    const newFilmCards = renderFilmCards(filmListElement, this._films.slice(0, this._showingCards));
+    const newFilmCards = renderFilmCards(filmListElement, this._films.slice(0, this._showingCards), this._onDataChange);
     this._showedFilmCardControllers = this._showedFilmCardControllers.concat(newFilmCards);
     this._renderLoadMoreButton();
 
@@ -100,7 +100,7 @@ export default class BasicMarkupController {
       this._showingCards = this._showingCards + TOTAL_NUMBER_OF_CARDS;
 
       const sortedFilms = getSortedFilms(this._films, this._sortingComponent.getSortType(), prevCards, this._showingCards);
-      const newFilmCards = renderFilmCards(filmListElement, sortedFilms);
+      const newFilmCards = renderFilmCards(filmListElement, sortedFilms, this._onDataChange);
 
       this._showedFilmCardControllers = this._showedFilmCardControllers.concat(newFilmCards);
 
@@ -108,6 +108,18 @@ export default class BasicMarkupController {
         remove(this._loadMoreButtonComponent);
       }
     });
+  }
+
+  _onDataChange(filmCardController, oldData, newData) {
+    const index = this._films.findIndex((it) => it === oldData);
+
+    if (index === -1) {
+      return;
+    }
+
+    this._films = [].concat(this._films.slice(0, index), newData, this._films.slice(index));
+
+    filmCardController.render(this._films[index]);
   }
 
   _onSortTypeChange(sortType) {
@@ -118,7 +130,7 @@ export default class BasicMarkupController {
 
     filmListElement.innerHTML = ``;
 
-    const newFilmCards = renderFilmCards(filmListElement, sortedFilms);
+    const newFilmCards = renderFilmCards(filmListElement, sortedFilms, this._onDataChange);
     this._showedFilmCardControllers = newFilmCards;
     remove(this._loadMoreButtonComponent);
     this._renderLoadMoreButton();

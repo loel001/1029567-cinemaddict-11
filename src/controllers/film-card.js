@@ -3,9 +3,9 @@ import FilmDetailsComponent from "../components/film-details";
 import {remove, render, RenderPosition} from "../utils/render";
 
 export default class FilmCardController {
-  constructor(container) {
+  constructor(container, onDataChange) {
     this._container = container;
-
+    this._onDataChange = onDataChange;
     this._filmCardComponent = null;
     this._filmDetailsComponent = null;
 
@@ -25,22 +25,40 @@ export default class FilmCardController {
     });
 
     this._filmCardComponent.setWatchlistButtonClickHandler(() => {
+      this._onDataChange(this, film, Object.assign({}, film, {
+        isWatchlist: !film.isWatchlist,
+      }));
     });
 
     this._filmCardComponent.setHistoryButtonClickHandler(() => {
+      this._onDataChange(this, film, Object.assign({}, film, {
+        isHistory: !film.isHistory,
+      }));
     });
 
     this._filmCardComponent.setFavoritesButtonClickHandler(() => {
+      this._onDataChange(this, film, Object.assign({}, film, {
+        isFavorite: !film.isFavorite,
+      }));
     });
 
-    // this._filmDetailsComponent.setWatchlistButtonClickHandler(() => {
-    // });
-    //
-    // this._filmDetailsComponent.setHistoryButtonClickHandler(() => {
-    // });
-    //
-    // this._filmDetailsComponent.setFavoritesButtonClickHandler(() => {
-    // });
+    this._filmDetailsComponent.setWatchlistButtonClickHandler(() => {
+      this._onDataChange(this, film, Object.assign({}, film, {
+        isWatchlist: !film.isWatchlist,
+      }));
+    });
+
+    this._filmDetailsComponent.setHistoryButtonClickHandler(() => {
+      this._onDataChange(this, film, Object.assign({}, film, {
+        isHistory: !film.isHistory,
+      }));
+    });
+
+    this._filmDetailsComponent.setFavoritesButtonClickHandler(() => {
+      this._onDataChange(this, film, Object.assign({}, film, {
+        isFavorite: !film.isFavorite,
+      }));
+    });
 
     this._filmDetailsComponent.closeButtonClickHandler(() => {
       this._closeFilmCard();
