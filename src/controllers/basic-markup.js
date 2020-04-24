@@ -79,10 +79,10 @@ export default class BasicMarkupController {
     // Карточки фильма в блоке «Top rated»
     // Карточки фильма в блоке «Most commented»
     const cardTopRatedWrappers = container.querySelectorAll(`.films-list--extra .films-list__container`);
-    for (let i = 0; i < NUMBER_OF_CARDS; i++) {
-      render(cardTopRatedWrappers[0], new FilmCardComponent(films[i]), RenderPosition.BEFOREEND);
-      render(cardTopRatedWrappers[1], new FilmCardComponent(films[i]), RenderPosition.BEFOREEND);
-    }
+    const TopRatedFilmCards = renderFilmCards(cardTopRatedWrappers[0], this._films.slice(0, NUMBER_OF_CARDS), this._onDataChange, this._onViewChange);
+    this._showedFilmCardControllers = this._showedFilmCardControllers.concat(TopRatedFilmCards);
+    const MostCommentedFilmCards = renderFilmCards(cardTopRatedWrappers[1], this._films.slice(0, NUMBER_OF_CARDS), this._onDataChange, this._onViewChange);
+    this._showedFilmCardControllers = this._showedFilmCardControllers.concat(MostCommentedFilmCards);
   }
 
   _renderLoadMoreButton() {

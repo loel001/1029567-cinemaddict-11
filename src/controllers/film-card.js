@@ -35,8 +35,10 @@ export default class FilmCardController {
     }
 
     this._filmCardComponent.setEditButtonsClickHandler(() => {
+      this._onViewChange();
       bodySite.appendChild(this._filmDetailsComponent.getElement());
       document.addEventListener(`keydown`, this._onEscKeyDown);
+      this._mode = Mode.EDIT;
     });
 
     this._filmCardComponent.setWatchlistButtonClickHandler(() => {
@@ -89,7 +91,6 @@ export default class FilmCardController {
   _closeFilmCard() {
     remove(this._filmDetailsComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
-    this._closeFilmCard.reset();
     this._mode = Mode.DEFAULT;
   }
 
