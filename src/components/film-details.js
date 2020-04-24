@@ -193,6 +193,9 @@ export default class FilmDetails extends AbstractSmartComponent {
     super.rerender();
   }
 
+  reset() {
+    this.rerender();
+  }
 
   closeButtonClickHandler(handler) {
     this.getElement().querySelector(`.film-details__close-btn`)

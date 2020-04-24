@@ -91,6 +91,7 @@ export default class FilmCardController {
   _closeFilmCard() {
     remove(this._filmDetailsComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+    this._filmDetailsComponent.reset();
     this._mode = Mode.DEFAULT;
   }
 
