@@ -1,11 +1,18 @@
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
-import {remove, render, RenderPosition} from "../utils/render";
+import {remove, replace, render, RenderPosition} from "../utils/render";
+
+const Mode = {
+  DEFAULT: `default`,
+  EDIT: `edit`,
+};
 
 export default class FilmCardController {
-  constructor(container, onDataChange) {
+  constructor(container, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
+    this._onViewChange = onViewChange;
+    this._mode = Mode.DEFAULT;
     this._filmCardComponent = null;
     this._filmDetailsComponent = null;
 
@@ -13,11 +20,19 @@ export default class FilmCardController {
   }
 
   render(film) {
+    const oldFilmCardComponent = this._filmCardComponent;
+    const oldFilmDetailsComponent = this._filmDetailsComponent;
+
     this._filmCardComponent = new FilmCardComponent(film);
     this._filmDetailsComponent = new FilmDetailsComponent(film);
     const bodySite = document.querySelector(`body`);
 
-    render(this._container, this._filmCardComponent, RenderPosition.BEFOREEND);
+    if (oldFilmCardComponent && oldFilmDetailsComponent) {
+      replace(this._filmCardComponent, oldFilmCardComponent);
+      replace(this._filmDetailsComponent, oldFilmDetailsComponent);
+    } else {
+      render(this._container, this._filmCardComponent, RenderPosition.BEFOREEND);
+    }
 
     this._filmCardComponent.setEditButtonsClickHandler(() => {
       bodySite.appendChild(this._filmDetailsComponent.getElement());
@@ -65,9 +80,17 @@ export default class FilmCardController {
     });
   }
 
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._closeFilmCard();
+    }
+  }
+
   _closeFilmCard() {
     remove(this._filmDetailsComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+    this._closeFilmCard.reset();
+    this._mode = Mode.DEFAULT;
   }
 
   _onEscKeyDown(evt) {

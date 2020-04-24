@@ -9,9 +9,9 @@ import LoadMoreButtonComponent from "../components/load-more-button";
 const TOTAL_NUMBER_OF_CARDS = 5;
 const NUMBER_OF_CARDS = 2;
 
-const renderFilmCards = (filmListElement, films, onDataChange) => {
+const renderFilmCards = (filmListElement, films, onDataChange, onViewChange) => {
   return films.map((film) => {
-    const filmCardController = new FilmCardController(filmListElement, onDataChange);
+    const filmCardController = new FilmCardController(filmListElement, onDataChange, onViewChange);
 
     filmCardController.render(film);
 
@@ -51,7 +51,7 @@ export default class BasicMarkupController {
     this._sortingComponent = new SortingComponent();
     this._onDataChange = this._onDataChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
-
+    this._onViewChange = this._onViewChange.bind(this);
     this._sortingComponent.setSortTypeChangeHandler(this._onSortTypeChange);
   }
 
@@ -72,7 +72,7 @@ export default class BasicMarkupController {
 
     const filmListElement = container.querySelector(`.films-list .films-list__container`);
     // карточка фильма
-    const newFilmCards = renderFilmCards(filmListElement, this._films.slice(0, this._showingCards), this._onDataChange);
+    const newFilmCards = renderFilmCards(filmListElement, this._films.slice(0, this._showingCards), this._onDataChange, this._onViewChange);
     this._showedFilmCardControllers = this._showedFilmCardControllers.concat(newFilmCards);
     this._renderLoadMoreButton();
 
@@ -100,7 +100,7 @@ export default class BasicMarkupController {
       this._showingCards = this._showingCards + TOTAL_NUMBER_OF_CARDS;
 
       const sortedFilms = getSortedFilms(this._films, this._sortingComponent.getSortType(), prevCards, this._showingCards);
-      const newFilmCards = renderFilmCards(filmListElement, sortedFilms, this._onDataChange);
+      const newFilmCards = renderFilmCards(filmListElement, sortedFilms, this._onDataChange, this._onViewChange);
 
       this._showedFilmCardControllers = this._showedFilmCardControllers.concat(newFilmCards);
 
@@ -122,6 +122,10 @@ export default class BasicMarkupController {
     filmCardController.render(this._films[index]);
   }
 
+  _onViewChange() {
+    this._showedFilmCardControllers.forEach((it) => it.setDefaultView());
+  }
+
   _onSortTypeChange(sortType) {
     this._showingCards = TOTAL_NUMBER_OF_CARDS;
 
@@ -130,7 +134,7 @@ export default class BasicMarkupController {
 
     filmListElement.innerHTML = ``;
 
-    const newFilmCards = renderFilmCards(filmListElement, sortedFilms, this._onDataChange);
+    const newFilmCards = renderFilmCards(filmListElement, sortedFilms, this._onDataChange, this._onViewChange);
     this._showedFilmCardControllers = newFilmCards;
     remove(this._loadMoreButtonComponent);
     this._renderLoadMoreButton();

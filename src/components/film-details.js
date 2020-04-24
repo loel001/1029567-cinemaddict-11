@@ -198,19 +198,18 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.getElement().querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, handler);
 
-    this._clickHandle = handler;
+    this._clickHandler = handler;
   }
 
   _subscribeOnEvents() {
     const element = this.getElement();
 
+    const emojiElement = element.querySelector(`.film-details__add-emoji-label`);
     element.querySelectorAll(`.film-details__emoji-label`)
       .forEach((elem) => {
         elem.addEventListener(`click`, () => {
-          document.querySelector(`.film-details__add-emoji-label`).append(elem.querySelector(`img`));
-          const textComment = element.querySelector(`.film-details__comment-input`).value;
-          document.querySelector(`.film-details__comment-input`).append(textComment);
-          this.rerender();
+          const link = elem.querySelector(`img`).src;
+          emojiElement.innerHTML = `<img src=${link} width="55" height="55" alt="emoji">`;
         });
       });
   }
