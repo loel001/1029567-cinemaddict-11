@@ -1,4 +1,3 @@
-import FilmCardComponent from "../components/film-card";
 import {remove, render, RenderPosition} from "../utils/render";
 import NoFilmCards from "../components/no-film-cards";
 import SortingComponent, {SortType} from "../components/sorting";
