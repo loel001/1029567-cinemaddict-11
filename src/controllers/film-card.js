@@ -27,13 +27,6 @@ export default class FilmCardController {
     this._filmDetailsComponent = new FilmDetailsComponent(film);
     const bodySite = document.querySelector(`body`);
 
-    if (oldFilmCardComponent && oldFilmDetailsComponent) {
-      replace(this._filmCardComponent, oldFilmCardComponent);
-      replace(this._filmDetailsComponent, oldFilmDetailsComponent);
-    } else {
-      render(this._container, this._filmCardComponent, RenderPosition.BEFOREEND);
-    }
-
     this._filmCardComponent.setEditButtonsClickHandler(() => {
       this._onViewChange();
       bodySite.appendChild(this._filmDetailsComponent.getElement());
@@ -77,9 +70,19 @@ export default class FilmCardController {
       }));
     });
 
-    this._filmDetailsComponent.closeButtonClickHandler(() => {
+    this._filmDetailsComponent.closeButtonClickHandler((evt) => {
+      evt.preventDefault();
       this._closeFilmCard();
     });
+
+    if (oldFilmCardComponent && oldFilmDetailsComponent) {
+      replace(this._filmCardComponent, oldFilmCardComponent);
+      if (bodySite.contains(oldFilmDetailsComponent.getElement())) {
+        replace(this._filmDetailsComponent, oldFilmDetailsComponent);
+      }
+    } else {
+      render(this._container, this._filmCardComponent, RenderPosition.BEFOREEND);
+    }
   }
 
   setDefaultView() {
@@ -91,7 +94,6 @@ export default class FilmCardController {
   _closeFilmCard() {
     remove(this._filmDetailsComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
-    this._filmDetailsComponent.reset();
     this._mode = Mode.DEFAULT;
   }
 

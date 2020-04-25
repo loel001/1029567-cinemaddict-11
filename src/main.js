@@ -5,7 +5,7 @@ import FilterComponent from "./components/filter";
 import {generateFilmCards} from "./mock/film-card";
 import {render, RenderPosition} from "./utils/render";
 
-const NUMBER_OF_FILMS = 17;
+const NUMBER_OF_FILMS = 7;
 const films = generateFilmCards(NUMBER_OF_FILMS);
 const siteHeader = document.querySelector(`.header`);
 const siteMain = document.querySelector(`.main`);

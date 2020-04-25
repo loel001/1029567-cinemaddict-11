@@ -72,7 +72,7 @@ const createCommentsWrapMarkup = (comments, commentsMarkup, emojiListMarkup) => 
 
 const createButtonMarkup = (name, content, isChecked) => {
   return (
-    `<input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="${name}" ${isChecked ? `checked` : ``}>
+    `<input type="checkbox" class="film-details__control-input film-details__control-input--${name} visually-hidden" id="${name}" name="${name}" ${isChecked ? `checked` : ``}>
       <label for="${name}" class="film-details__control-label film-details__control-label--${name}">${content}</label>`
   );
 };
@@ -176,6 +176,9 @@ export default class FilmDetails extends AbstractSmartComponent {
 
     this._film = film;
     this._clickHandler = null;
+    this._watchListHandler = null;
+    this._historyHandler = null;
+    this._favoritesHandler = null;
 
     this._subscribeOnEvents();
   }
@@ -186,15 +189,14 @@ export default class FilmDetails extends AbstractSmartComponent {
 
   recoveryListeners() {
     this.closeButtonClickHandler(this._clickHandler);
+    this.setWatchlistButtonClickHandler(this._watchListHandler);
+    this.setHistoryButtonClickHandler(this._historyHandler);
+    this.setFavoritesButtonClickHandler(this._favoritesHandler);
     this._subscribeOnEvents();
   }
 
   rerender() {
     super.rerender();
-  }
-
-  reset() {
-    this.rerender();
   }
 
   closeButtonClickHandler(handler) {
@@ -218,17 +220,20 @@ export default class FilmDetails extends AbstractSmartComponent {
   }
 
   setWatchlistButtonClickHandler(handler) {
-    this.getElement().querySelector(`.film-details__control-label--watchlist`)
-      .addEventListener(`click`, handler);
+    this.getElement().querySelector(`.film-details__control-input--watchlist`)
+      .addEventListener(`change`, handler);
+    this._watchListHandler = handler;
   }
 
   setHistoryButtonClickHandler(handler) {
-    this.getElement().querySelector(`.film-details__control-label--watched`)
-      .addEventListener(`click`, handler);
+    this.getElement().querySelector(`.film-details__control-input--watched`)
+      .addEventListener(`change`, handler);
+    this._historyHandler = handler;
   }
 
   setFavoritesButtonClickHandler(handler) {
-    this.getElement().querySelector(`.film-details__control-label--favorite`)
-      .addEventListener(`click`, handler);
+    this.getElement().querySelector(`.film-details__control-input--favorite`)
+      .addEventListener(`change`, handler);
+    this._favoritesHandler = handler;
   }
 }

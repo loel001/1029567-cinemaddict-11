@@ -6,6 +6,7 @@ import FilmCardController from "./film-card";
 import LoadMoreButtonComponent from "../components/load-more-button";
 
 const TOTAL_NUMBER_OF_CARDS = 5;
+const SHOWING_TASKS_COUNT_BY_BUTTON = 5;
 const NUMBER_OF_CARDS = 2;
 
 const renderFilmCards = (filmListElement, films, onDataChange, onViewChange) => {
@@ -33,7 +34,6 @@ const getSortedFilms = (films, sortType, from, to) => {
       sortedFilms = showingFilms.sort((a, b) => b.rating - a.rating);
       break;
   }
-
   return sortedFilms.slice(from, to);
 };
 
@@ -45,9 +45,9 @@ export default class BasicMarkupController {
     this._showedFilmCardControllers = [];
     this._showingCards = TOTAL_NUMBER_OF_CARDS;
     this._noFilmCards = new NoFilmCards();
+    this._sortingComponent = new SortingComponent();
     this._filmCardsComponent = new FilmCardsComponent();
     this._loadMoreButtonComponent = new LoadMoreButtonComponent();
-    this._sortingComponent = new SortingComponent();
     this._onDataChange = this._onDataChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
@@ -68,8 +68,9 @@ export default class BasicMarkupController {
     // сортировка
     render(container, this._sortingComponent, RenderPosition.BEFOREBEGIN);
     render(filmWrapper, this._filmCardsComponent, RenderPosition.BEFOREEND);
+    const filmListElement = this._filmCardsComponent.getElement();
 
-    const filmListElement = container.querySelector(`.films-list .films-list__container`);
+    // const filmListElement = container.querySelector(`.films-list .films-list__container`);
     // карточка фильма
     const newFilmCards = renderFilmCards(filmListElement, this._films.slice(0, this._showingCards), this._onDataChange, this._onViewChange);
     this._showedFilmCardControllers = this._showedFilmCardControllers.concat(newFilmCards);
@@ -96,7 +97,7 @@ export default class BasicMarkupController {
     this._loadMoreButtonComponent.setClickHandler(() => {
       const prevCards = this._showingCards;
       const filmListElement = this._filmCardsComponent.getElement();
-      this._showingCards = this._showingCards + TOTAL_NUMBER_OF_CARDS;
+      this._showingCards = this._showingCards + SHOWING_TASKS_COUNT_BY_BUTTON;
 
       const sortedFilms = getSortedFilms(this._films, this._sortingComponent.getSortType(), prevCards, this._showingCards);
       const newFilmCards = renderFilmCards(filmListElement, sortedFilms, this._onDataChange, this._onViewChange);
@@ -116,7 +117,7 @@ export default class BasicMarkupController {
       return;
     }
 
-    this._films = [].concat(this._films.slice(0, index), newData, this._films.slice(index));
+    this._films = [].concat(this._films.slice(0, index), newData, this._films.slice(index + 1));
 
     filmCardController.render(this._films[index]);
   }
