@@ -1,5 +1,6 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {emojiNames} from "../const";
+import {formatTime, formatPopupDate, formatCommentDate} from "../utils/common";
 
 const createGenresMarkup = (genres) => {
   return genres
@@ -14,6 +15,7 @@ const createGenresMarkup = (genres) => {
 const createCommentsMarkup = (comments) => {
   return comments
     .map((comment) => {
+      const commentDate = formatCommentDate(comment.day);
       return (
         `<li class="film-details__comment">
           <span class="film-details__comment-emoji">
@@ -23,7 +25,7 @@ const createCommentsMarkup = (comments) => {
             <p class="film-details__comment-text">${comment.text}</p>
             <p class="film-details__comment-info">
               <span class="film-details__comment-author">${comment.author}</span>
-              <span class="film-details__comment-day">${comment.day}</span>
+              <span class="film-details__comment-day">${commentDate}</span>
               <button class="film-details__comment-delete">Delete</button>
             </p>
           </div>
@@ -85,7 +87,8 @@ const createFilmDetailsTemplate = (film) => {
   const emojiListMarkup = createEmojiListMarkup(emojiNames);
   const commentsWrapMarkup = createCommentsWrapMarkup(comments, commentsMarkup, emojiListMarkup);
   const genreTerm = genreNames.length > 1 ? `Genres` : `Genre`;
-  const year = date.getFullYear();
+  const popupDate = formatPopupDate(date);
+  const time = formatTime(duration);
   const watchlistButton = createButtonMarkup(`watchlist`, `Add-to-watchlist`, film.isWatchlist);
   const historyButton = createButtonMarkup(`watched`, `Already watched`, film.isHistory);
   const favoritesButton = createButtonMarkup(`favorite`, `Add to favorites`, film.isFavorite);
@@ -131,11 +134,11 @@ const createFilmDetailsTemplate = (film) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${date.getDate()} ${date.getMonth()} ${year}</td>
+              <td class="film-details__cell">${popupDate}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${duration}</td>
+              <td class="film-details__cell">${time}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>

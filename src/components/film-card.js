@@ -1,4 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
+import {formatTime, formatDate} from "../utils/common";
 
 const createButtonMarkup = (name, isActive) => {
   return (
@@ -13,18 +14,19 @@ const createButtonMarkup = (name, isActive) => {
 
 const createFilmCardTemplate = (film) => {
   const {movieTitle, rating, date, duration, genreNames, poster, description, comments} = film;
-  const year = date.getFullYear();
 
+  const year = formatDate(date);
   const watchlistButton = createButtonMarkup(`add-to-watchlist`, film.isWatchlist);
   const historyButton = createButtonMarkup(`mark-as-watched`, film.isHistory);
   const favoritesButton = createButtonMarkup(`favorite`, film.isFavorite);
+  const time = formatTime(duration);
   return (
     `<article class="film-card">
           <h3 class="film-card__title">${movieTitle}</h3>
           <p class="film-card__rating">${rating}</p>
           <p class="film-card__info">
             <span class="film-card__year">${year}</span>
-            <span class="film-card__duration">${duration}</span>
+            <span class="film-card__duration">${time}</span>
             <span class="film-card__genre">${genreNames[0]}</span>
           </p>
           <img src="./images/posters/${poster}" alt="${movieTitle}" class="film-card__poster">

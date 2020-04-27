@@ -47,31 +47,29 @@ const actors = [`Erich von Stroheim`, `Mary Beth Hughes`, `Dan Duryea`];
 const popupGenres = [`Drama`, `Film-Noir`, `Mystery`, `Drama`, `Film-Noir`, `Mystery`];
 const posters = [`the-dance-of-life.jpg`, `sagebrush-trail.jpg`, `the-man-with-the-golden-arm.jpg`, `santa-claus-conquers-the-martians.jpg`, `popeye-meets-sinbad.png`];
 const countries = [`USA`, `Russia`, `Australia`];
+const startDate = new Date(1920, 3, 5).getTime();
+const finalDate = new Date(2020, 3, 27).getTime();
 const comments = [{
   text: `Interesting setting and a good cast`,
   author: `Tim Macoveev`,
   emoji: `smile`,
-  day: `2019/12/31 23:59`
+  day: new Date(getRandomInRange(finalDate, finalDate))
 }, {
   text: `Booooooooooring`,
   author: `John Doe`,
   emoji: `sleeping`,
-  day: `2 days ago`
+  day: new Date(getRandomInRange(startDate, finalDate))
 }, {
   text: `Very very old. Meh`,
   author: `John Doe`,
   emoji: `puke`,
-  day: `2 days ago`
+  day: new Date(getRandomInRange(startDate, finalDate))
 }, {
   text: `Almost two hours? Seriously?`,
   author: `John Doe`,
   emoji: `angry`,
-  day: `Today`
+  day: new Date(getRandomInRange(startDate, finalDate))
 }];
-
-const startDate = new Date(1920, 1, 1).getTime();
-const finalDate = new Date(2020, 3, 1).getTime();
-const durations = [`1h 20m`, `2h 15m`, `1h 45m`];
 
 const generateFilmCard = () => {
   return {
@@ -90,7 +88,7 @@ const generateFilmCard = () => {
     isFavorite: Math.random() > 0.5,
     isHistory: Math.random() > 0.5,
     isWatchlist: Math.random() > 0.5,
-    duration: durations[getRandomInRange(0, durations.length - 1)],
+    duration: getRandomInRange(60, 180),
   };
 };
 

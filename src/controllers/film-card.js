@@ -83,6 +83,9 @@ export default class FilmCardController {
       if (this._mode === Mode.EDIT) {
         replace(this._filmDetailsComponent, oldFilmDetailsComponent);
       }
+      // if (bodySite.contains(oldFilmDetailsComponent.getElement())) {
+      //   replace(this._filmDetailsComponent, oldFilmDetailsComponent);
+      // }
     } else {
       render(this._container, this._filmCardComponent, RenderPosition.BEFOREEND);
     }
