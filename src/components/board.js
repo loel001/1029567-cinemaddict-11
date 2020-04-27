@@ -1,6 +1,6 @@
 import AbstractComponent from "./abstract-component.js";
 
-const createBasicMarkupTemplate = () => {
+const createBoardTemplate = () => {
   return (
     `<section class="films">
     <section class="films-list">
@@ -21,8 +21,8 @@ const createBasicMarkupTemplate = () => {
   );
 };
 
-export default class BasicMarkup extends AbstractComponent {
+export default class Board extends AbstractComponent {
   getTemplate() {
-    return createBasicMarkupTemplate();
+    return createBoardTemplate();
   }
 }

@@ -56,18 +56,21 @@ export default class FilmCardController {
       this._onDataChange(this, film, Object.assign({}, film, {
         isWatchlist: !film.isWatchlist,
       }));
+      this._mode = Mode.EDIT;
     });
 
     this._filmDetailsComponent.setHistoryButtonClickHandler(() => {
       this._onDataChange(this, film, Object.assign({}, film, {
         isHistory: !film.isHistory,
       }));
+      this._mode = Mode.EDIT;
     });
 
     this._filmDetailsComponent.setFavoritesButtonClickHandler(() => {
       this._onDataChange(this, film, Object.assign({}, film, {
         isFavorite: !film.isFavorite,
       }));
+      this._mode = Mode.EDIT;
     });
 
     this._filmDetailsComponent.closeButtonClickHandler((evt) => {
@@ -77,7 +80,7 @@ export default class FilmCardController {
 
     if (oldFilmCardComponent && oldFilmDetailsComponent) {
       replace(this._filmCardComponent, oldFilmCardComponent);
-      if (bodySite.contains(oldFilmDetailsComponent.getElement())) {
+      if (this._mode === Mode.EDIT) {
         replace(this._filmDetailsComponent, oldFilmDetailsComponent);
       }
     } else {

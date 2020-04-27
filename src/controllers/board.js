@@ -37,7 +37,7 @@ const getSortedFilms = (films, sortType, from, to) => {
   return sortedFilms.slice(from, to);
 };
 
-export default class BasicMarkupController {
+export default class BoardController {
   constructor(container) {
     this._container = container;
 
