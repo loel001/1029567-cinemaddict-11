@@ -1,6 +1,8 @@
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
-import {remove, replace, render, RenderPosition} from "../utils/render";
+import {replace, render, RenderPosition} from "../utils/render";
+
+const bodySite = document.querySelector(`body`);
 
 const Mode = {
   DEFAULT: `default`,
@@ -25,7 +27,6 @@ export default class FilmCardController {
 
     this._filmCardComponent = new FilmCardComponent(film);
     this._filmDetailsComponent = new FilmDetailsComponent(film);
-    const bodySite = document.querySelector(`body`);
 
     this._filmCardComponent.setEditButtonsClickHandler(() => {
       this._onViewChange();
@@ -83,9 +84,6 @@ export default class FilmCardController {
       if (this._mode === Mode.EDIT) {
         replace(this._filmDetailsComponent, oldFilmDetailsComponent);
       }
-      // if (bodySite.contains(oldFilmDetailsComponent.getElement())) {
-      //   replace(this._filmDetailsComponent, oldFilmDetailsComponent);
-      // }
     } else {
       render(this._container, this._filmCardComponent, RenderPosition.BEFOREEND);
     }
@@ -98,7 +96,7 @@ export default class FilmCardController {
   }
 
   _closeFilmCard() {
-    remove(this._filmDetailsComponent);
+    bodySite.removeChild(this._filmDetailsComponent.getElement());
     document.removeEventListener(`keydown`, this._onEscKeyDown);
     this._mode = Mode.DEFAULT;
   }
