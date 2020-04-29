@@ -1,8 +1,9 @@
 import moment from "moment";
 
 export const formatTime = (date) => {
-  const hours = moment.duration(date, `minutes`).hours();
-  const minutes = moment.duration(date, `minutes`).minutes();
+  const duration = moment.duration(date, `minutes`);
+  const hours = duration.hours();
+  const minutes = duration.minutes();
   return `${hours}` + `h` + ` ` + `${minutes}` + `m`;
 };
 
