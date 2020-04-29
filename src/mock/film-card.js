@@ -74,6 +74,7 @@ const comments = [{
 
 const generateFilmCard = () => {
   return {
+    id: String(new Date() + Math.random()),
     movieTitle: movieTitles[getRandomInRange(0, movieTitles.length - 1)],
     age: ages[getRandomInRange(0, ages.length - 1)],
     director: directors[getRandomInRange(0, directors.length - 1)],
