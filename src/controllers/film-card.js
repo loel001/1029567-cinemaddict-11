@@ -1,6 +1,6 @@
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
-import {replace, render, RenderPosition} from "../utils/render";
+import {replace, render, remove, RenderPosition} from "../utils/render";
 
 const bodySite = document.querySelector(`body`);
 
@@ -93,6 +93,12 @@ export default class FilmCardController {
     if (this._mode !== Mode.DEFAULT) {
       this._closeFilmCard();
     }
+  }
+
+  destroy() {
+    remove(this._filmDetailsComponent);
+    remove(this._filmCardComponent);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
   _closeFilmCard() {

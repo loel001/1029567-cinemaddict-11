@@ -1,28 +1,25 @@
 import AbstractComponent from "./abstract-component.js";
-import {filterNames, cardfilters} from "../const";
+import {FilterType} from "../const";
 
-const getNameFilter = (array, name) => {
-  return array.filter((element) => {
-    return element[name] === true;
-  });
+const FILTER_ID_PREFIX = `#`;
+
+const getFilterNameById = (href) => {
+  return href.substring(FILTER_ID_PREFIX.length);
 };
 
-const createFilterMarkup = (filters, films) => {
-  return filters
-    .map((name, index) => {
-      return (
-        `<a href="#${name}" class="main-navigation__item">${name} <span class="main-navigation__item-count">${getNameFilter(films, cardfilters[index]).length}</span></a>`
-      );
-    })
-    .join(`\n`);
+const createFilterMarkup = (filter) => {
+  const {name, count} = filter;
+
+  return (
+    `<a href="#${name}" class="main-navigation__item ${name === FilterType.ALL ? `main-navigation__item--active` : ``}">${name} ${name === FilterType.ALL ? `movies` : `<span class="main-navigation__item-count">${count}</span>`}</a>`
+  );
 };
 
-const createFilterTemplate = (films) => {
-  const filtersMarkup = createFilterMarkup(filterNames, films);
+const createFilterTemplate = (filters) => {
+  const filtersMarkup = filters.map((it) => createFilterMarkup(it)).join(`\n`);
   return (
     `<nav class="main-navigation">
     <div class="main-navigation__items">
-      <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
       ${filtersMarkup}
     </div>
     <a href="#stats" class="main-navigation__additional">Stats</a>
@@ -31,13 +28,26 @@ const createFilterTemplate = (films) => {
 };
 
 export default class Filter extends AbstractComponent {
-  constructor(films) {
+  constructor(filters) {
     super();
 
-    this._films = films;
+    this._filters = filters;
   }
 
   getTemplate() {
-    return createFilterTemplate(this._films);
+    return createFilterTemplate(this._filters);
+  }
+
+  setFilterChangeHandler(handler) {
+    this.getElement().querySelectorAll(`.main-navigation__item`)
+      .forEach((element) => {
+        element.addEventListener(`click`, (evt) => {
+          evt.preventDefault();
+          const filterName = getFilterNameById(element.getAttribute(`href`));
+          this.getElement().querySelector(`.main-navigation__item--active`).classList.remove(`main-navigation__item--active`);
+          evt.target.classList.add(`main-navigation__item--active`);
+          handler(filterName);
+        });
+      });
   }
 }

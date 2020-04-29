@@ -1,7 +1,7 @@
 import BoardComponent from "./components/board";
 import BoardController from "./controllers/board";
 import SiteProfileComponent from "./components/site-profile";
-import FilterComponent from "./components/filter";
+import FilterController from "./controllers/filter.js";
 import FilmCardsModel from "./models/film-cards";
 import {generateFilmCards} from "./mock/film-card";
 import {render, RenderPosition} from "./utils/render";
@@ -18,7 +18,8 @@ const siteMain = document.querySelector(`.main`);
 render(siteHeader, new SiteProfileComponent(), RenderPosition.BEFOREEND);
 
 // статистика(фильтры)
-render(siteMain, new FilterComponent(films), RenderPosition.BEFOREEND);
+const filterController = new FilterController(siteMain, filmCardsModel);
+filterController.render();
 
 // основная разметка
 const boardComponent = new BoardComponent();

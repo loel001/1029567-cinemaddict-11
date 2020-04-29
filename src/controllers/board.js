@@ -52,8 +52,10 @@ export default class BoardController {
     this._onDataChange = this._onDataChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
+    this._onFilterChange = this._onFilterChange.bind(this);
 
     this._sortingComponent.setSortTypeChangeHandler(this._onSortTypeChange);
+    this._filmCardsModel.setFilterChangeHandler(this._onFilterChange);
   }
 
   render() {
@@ -82,6 +84,11 @@ export default class BoardController {
     // this._showedFilmCardControllers = this._showedFilmCardControllers.concat(TopRatedFilmCards);
     // const MostCommentedFilmCards = renderFilmCards(cardTopRatedWrappers[1], this._films.slice(0, NUMBER_OF_CARDS), this._onDataChange, this._onViewChange);
     // this._showedFilmCardControllers = this._showedFilmCardControllers.concat(MostCommentedFilmCards);
+  }
+
+  _removeFilmCards() {
+    this._showedFilmCardControllers.forEach((filmCardController) => filmCardController.destroy());
+    this._showedFilmCardControllers = [];
   }
 
   _renderFilmCards(films) {
@@ -117,6 +124,12 @@ export default class BoardController {
     });
   }
 
+  _updateTasks(count) {
+    this._removeFilmCards();
+    this._renderFilmCards(this._filmCardsModel.getFilms().slice(0, count));
+    this._renderLoadMoreButton();
+  }
+
   _onDataChange(filmCardController, oldData, newData) {
     const isSuccess = this._filmCardsModel.updateFilm(oldData.id, newData);
 
@@ -140,5 +153,9 @@ export default class BoardController {
     const newFilmCards = renderFilmCards(filmListElement, sortedFilms, this._onDataChange, this._onViewChange);
     this._showedFilmCardControllers = newFilmCards;
     this._renderLoadMoreButton();
+  }
+
+  _onFilterChange() {
+    this._updateTasks(TOTAL_NUMBER_OF_CARDS);
   }
 }
