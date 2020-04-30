@@ -1,9 +1,5 @@
 import {FilterType} from "../const.js";
 
-export const capitalizeFirstLetter = (string) => {
-  return `${string[0].toUpperCase()}${string.slice(1)}`;
-};
-
 export const getWatchlistFilms = (films) => {
   return films.filter((film) => film.isWatchlist);
 };

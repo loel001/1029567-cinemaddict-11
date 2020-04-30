@@ -7,16 +7,15 @@ const getFilterNameById = (href) => {
   return href.substring(FILTER_ID_PREFIX.length);
 };
 
-const createFilterMarkup = (filter) => {
+const createFilterMarkup = (filter, isChecked) => {
   const {name, count} = filter;
-
   return (
-    `<a href="#${name}" class="main-navigation__item ${name === FilterType.ALL ? `main-navigation__item--active` : ``}">${name} ${name === FilterType.ALL ? `movies` : `<span class="main-navigation__item-count">${count}</span>`}</a>`
+    `<a href="#${name}" class="main-navigation__item ${isChecked ? `main-navigation__item--active` : ``}">${name} ${name === FilterType.ALL ? `movies` : `<span class="main-navigation__item-count">${count}</span>`}</a>`
   );
 };
 
 const createFilterTemplate = (filters) => {
-  const filtersMarkup = filters.map((it) => createFilterMarkup(it)).join(`\n`);
+  const filtersMarkup = filters.map((it) => createFilterMarkup(it, it.checked)).join(`\n`);
   return (
     `<nav class="main-navigation">
     <div class="main-navigation__items">
@@ -36,6 +35,10 @@ export default class Filter extends AbstractComponent {
 
   getTemplate() {
     return createFilterTemplate(this._filters);
+  }
+
+  updateFilters(filters) {
+    this._filters = filters;
   }
 
   setFilterChangeHandler(handler) {
