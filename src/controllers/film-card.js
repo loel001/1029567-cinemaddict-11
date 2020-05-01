@@ -1,6 +1,6 @@
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
-import {replace, render, remove, RenderPosition} from "../utils/render";
+import {render, remove, RenderPosition} from "../utils/render";
 
 const bodySite = document.querySelector(`body`);
 
@@ -22,9 +22,6 @@ export default class FilmCardController {
   }
 
   render(film) {
-    const oldFilmCardComponent = this._filmCardComponent;
-    const oldFilmDetailsComponent = this._filmDetailsComponent;
-
     this._filmCardComponent = new FilmCardComponent(film);
     this._filmDetailsComponent = new FilmDetailsComponent(film);
 
@@ -57,21 +54,18 @@ export default class FilmCardController {
       this._onDataChange(this, film, Object.assign({}, film, {
         isWatchlist: !film.isWatchlist,
       }));
-      this._mode = Mode.EDIT;
     });
 
     this._filmDetailsComponent.setHistoryButtonClickHandler(() => {
       this._onDataChange(this, film, Object.assign({}, film, {
         isHistory: !film.isHistory,
       }));
-      this._mode = Mode.EDIT;
     });
 
     this._filmDetailsComponent.setFavoritesButtonClickHandler(() => {
       this._onDataChange(this, film, Object.assign({}, film, {
         isFavorite: !film.isFavorite,
       }));
-      this._mode = Mode.EDIT;
     });
 
     this._filmDetailsComponent.closeButtonClickHandler((evt) => {
@@ -79,14 +73,7 @@ export default class FilmCardController {
       this._closeFilmCard();
     });
 
-    if (oldFilmCardComponent && oldFilmDetailsComponent) {
-      replace(this._filmCardComponent, oldFilmCardComponent);
-      if (this._mode === Mode.EDIT) {
-        replace(this._filmDetailsComponent, oldFilmDetailsComponent);
-      }
-    } else {
-      render(this._container, this._filmCardComponent, RenderPosition.BEFOREEND);
-    }
+    render(this._container, this._filmCardComponent, RenderPosition.BEFOREEND);
   }
 
   setDefaultView() {
@@ -96,7 +83,6 @@ export default class FilmCardController {
   }
 
   destroy() {
-    remove(this._filmDetailsComponent);
     remove(this._filmCardComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
