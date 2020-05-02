@@ -37,10 +37,6 @@ export default class Filter extends AbstractComponent {
     return createFilterTemplate(this._filters);
   }
 
-  updateFilters(filters) {
-    this._filters = filters;
-  }
-
   setFilterChangeHandler(handler) {
     this.getElement().querySelectorAll(`.main-navigation__item`)
       .forEach((element) => {
