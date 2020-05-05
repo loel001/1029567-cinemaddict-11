@@ -9,6 +9,7 @@ import SiteProfileComponent from "../components/site-profile";
 const TOTAL_NUMBER_OF_CARDS = 5;
 const SHOWING_CARDS_COUNT_BY_BUTTON = 5;
 const NUMBER_OF_CARDS = 2;
+const siteHeader = document.querySelector(`.header`);
 
 const renderFilmCards = (filmListElement, films, onDataChange, onViewChange) => {
   return films.map((film) => {
@@ -65,7 +66,6 @@ export default class BoardController {
     const container = this._container.getElement();
     const films = this._filmCardsModel.getFilms();
     const filmWrapper = container.querySelector(`.films-list`);
-    const siteHeader = document.querySelector(`.header`);
 
     if (this._filmCardsModel.getFilms().length === 0) {
       render(filmWrapper, this._noFilmCards, RenderPosition.BEFOREEND);
@@ -79,10 +79,9 @@ export default class BoardController {
     render(container, this._sortingComponent, RenderPosition.BEFOREBEGIN);
     render(filmWrapper, this._filmCardsComponent, RenderPosition.BEFOREEND);
 
-    // карточка фильма
-    this._renderFilmCards(films.slice(0, this._showingCards));
-    this._renderSpecialFilmCards(this._filmCardsModel.getFilms());
-    this._renderLoadMoreButton();
+    // карточки фильма
+    this._renderFilmCards(films);
+    this._renderSpecialFilmCards(films);
   }
 
   _removeFilmCards() {
@@ -92,28 +91,27 @@ export default class BoardController {
 
   _renderFilmCards(films) {
     const filmListElement = this._filmCardsComponent.getElement();
-    // карточка фильма
-    const newFilmCards = renderFilmCards(filmListElement, films, this._onDataChange, this._onViewChange);
+
+    const mainFilms = films.slice(0, this._showingCards);
+
+    const newFilmCards = renderFilmCards(filmListElement, mainFilms, this._onDataChange, this._onViewChange);
     this._showedFilmCardControllers = this._showedFilmCardControllers.concat(newFilmCards);
 
-    this._showingCards = this._showedFilmCardControllers.length;
+    this._renderLoadMoreButton();
   }
 
   _renderSpecialFilmCards(films) {
     const container = this._container.getElement();
     const cardTopRatedWrappers = container.querySelectorAll(`.films-list--extra .films-list__container`);
-    // Карточки фильма в блоке «Top rated»
-    // Карточки фильма в блоке «Most commented»
+
     const topRatedFilms = films.slice(0).sort((a, b) => b.rating - a.rating).slice(0, NUMBER_OF_CARDS);
     const mostCommentedFilms = films.slice(0).sort((a, b) => b.comments.length - a.comments.length).slice(0, NUMBER_OF_CARDS);
 
     const topRatedFilmCards = renderFilmCards(cardTopRatedWrappers[0], topRatedFilms, this._onDataChange, this._onViewChange);
     this._showedFilmCardControllers = this._showedFilmCardControllers.concat(topRatedFilmCards);
-    // renderFilmCards(cardTopRatedWrappers[0], topRatedFilms, this._onDataChange, this._onViewChange);
 
     const mostCommentedFilmCards = renderFilmCards(cardTopRatedWrappers[1], mostCommentedFilms, this._onDataChange, this._onViewChange);
     this._showedFilmCardControllers = this._showedFilmCardControllers.concat(mostCommentedFilmCards);
-    // renderFilmCards(cardTopRatedWrappers[1], mostCommentedFilms, this._onDataChange, this._onViewChange);
   }
 
   _renderLoadMoreButton() {
@@ -131,9 +129,8 @@ export default class BoardController {
 
   _updateFilms(count) {
     this._removeFilmCards();
-    this._renderFilmCards(this._filmCardsModel.getFilms().slice(0, count));
-    this._renderSpecialFilmCards(this._filmCardsModel.getFilms());
-    this._renderLoadMoreButton();
+    this._renderFilmCards(this._filmCardsModel.getFilms(), count);
+    this._renderSpecialFilmCards(this._filmCardsModel.getFilmsAll());
   }
 
   _onDataChange(filmCardController, oldData, newData) {
@@ -151,11 +148,9 @@ export default class BoardController {
     this._showingCards = TOTAL_NUMBER_OF_CARDS;
 
     const sortedFilms = getSortedFilms(this._filmCardsModel.getFilms(), sortType, 0, this._showingCards);
-
     this._removeFilmCards();
     this._renderFilmCards(sortedFilms);
-    this._renderSpecialFilmCards(this._filmCardsModel.getFilms());
-    this._renderLoadMoreButton();
+    this._renderSpecialFilmCards(this._filmCardsModel.getFilmsAll());
   }
 
   _onLoadMoreButtonClick() {
