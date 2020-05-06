@@ -18,7 +18,7 @@ const filterController = new FilterController(siteMain, filmCardsModel);
 filterController.render();
 
 // основная разметка
-const boardComponent = new BoardComponent();
+const boardComponent = new BoardComponent(films);
 const boardController = new BoardController(boardComponent, filmCardsModel);
 render(siteMain, boardComponent, RenderPosition.BEFOREEND);
 boardController.render(films);
