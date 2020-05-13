@@ -13,13 +13,14 @@ const createButtonMarkup = (name, isActive) => {
 };
 
 const createFilmCardTemplate = (film) => {
-  const {movieTitle, rating, date, duration, genreNames, poster, description, comments} = film;
+  const {movieTitle, rating, date, duration, genreNames, poster, description, commentsCount} = film;
 
   const year = formatDate(date);
   const watchlistButton = createButtonMarkup(`add-to-watchlist`, film.isWatchlist);
   const historyButton = createButtonMarkup(`mark-as-watched`, film.isHistory);
   const favoritesButton = createButtonMarkup(`favorite`, film.isFavorite);
   const time = formatTime(duration);
+  const newDescription = description.length > 140 ? description.substr(0, 139) + `…` : description;
   return (
     `<article class="film-card">
           <h3 class="film-card__title">${movieTitle}</h3>
@@ -30,8 +31,8 @@ const createFilmCardTemplate = (film) => {
             <span class="film-card__genre">${genreNames[0]}</span>
           </p>
           <img src="./images/posters/${poster}" alt="${movieTitle}" class="film-card__poster">
-          <p class="film-card__description">${description}</p>
-          <a class="film-card__comments">${comments.length} comments</a>
+          <p class="film-card__description">${newDescription}</p>
+          <a class="film-card__comments">${commentsCount} comments</a>
           <form class="film-card__controls">
             ${watchlistButton}
             ${historyButton}

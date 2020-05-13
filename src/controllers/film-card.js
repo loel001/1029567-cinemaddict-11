@@ -1,6 +1,7 @@
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
 import {render, replace, remove, RenderPosition} from "../utils/render";
+import CommentsController from "./comments";
 
 const bodySite = document.querySelector(`body`);
 
@@ -10,8 +11,9 @@ const Mode = {
 };
 
 export default class FilmCardController {
-  constructor(container, onDataChange, onViewChange) {
+  constructor(container, commentsModel, onDataChange, onViewChange) {
     this._container = container;
+    this._commentsModel = commentsModel;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
     this._mode = Mode.DEFAULT;
@@ -30,6 +32,7 @@ export default class FilmCardController {
     this._filmCardComponent.setEditButtonsClickHandler(() => {
       this._onViewChange();
       bodySite.appendChild(this._filmDetailsComponent.getElement());
+      this._renderComments();
       document.addEventListener(`keydown`, this._onEscKeyDown);
       this._mode = Mode.EDIT;
       const popup = document.querySelectorAll(`.film-details`);
@@ -82,6 +85,9 @@ export default class FilmCardController {
     if (oldFilmDetailsComponent) {
       replace(this._filmCardComponent, oldFilmCardComponent);
       replace(this._filmDetailsComponent, oldFilmDetailsComponent);
+      if (this._mode === Mode.EDIT) {
+        this._renderComments();
+      }
       document.addEventListener(`keydown`, this._onEscKeyDown);
     } else {
       render(this._container, this._filmCardComponent, RenderPosition.BEFOREEND);
@@ -111,5 +117,9 @@ export default class FilmCardController {
     if (isEscKey) {
       this._closeFilmCard();
     }
+  }
+
+  _renderComments() {
+    new CommentsController(this._filmDetailsComponent, this._commentsModel, this._onDataChange).render();
   }
 }

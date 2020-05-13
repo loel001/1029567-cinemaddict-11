@@ -1,3 +1,5 @@
+import {generateComments} from "./comment.js";
+
 const descriptions = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
   `Cras aliquet varius magna, non porta ligula feugiat eget.`,
@@ -48,33 +50,12 @@ const popupGenres = [`Drama`, `Film-Noir`, `Mystery`, `Drama`, `Film-Noir`, `Mys
 const posters = [`the-dance-of-life.jpg`, `sagebrush-trail.jpg`, `the-man-with-the-golden-arm.jpg`, `santa-claus-conquers-the-martians.jpg`, `popeye-meets-sinbad.png`];
 const countries = [`USA`, `Russia`, `Australia`];
 const startDate = new Date(1920, 3, 5).getTime();
-const startDateComment = new Date(2020, 1, 5).getTime();
 const finalDate = new Date(2020, 3, 27).getTime();
-const comments = [{
-  text: `Interesting setting and a good cast`,
-  author: `Tim Macoveev`,
-  emoji: `smile`,
-  day: new Date(getRandomInRange(startDateComment, finalDate))
-}, {
-  text: `Booooooooooring`,
-  author: `John Doe`,
-  emoji: `sleeping`,
-  day: new Date(getRandomInRange(startDateComment, finalDate))
-}, {
-  text: `Very very old. Meh`,
-  author: `John Doe`,
-  emoji: `puke`,
-  day: new Date(getRandomInRange(startDateComment, finalDate))
-}, {
-  text: `Almost two hours? Seriously?`,
-  author: `John Doe`,
-  emoji: `angry`,
-  day: new Date(getRandomInRange(startDateComment, finalDate))
-}];
+// const comments = generateComments(getRandomInRange(0, 3));
 
 const generateFilmCard = () => {
   return {
-    id: String(new Date() + Math.random()),
+    id: Number(Date.now()) + Math.random(),
     movieTitle: movieTitles[getRandomInRange(0, movieTitles.length - 1)],
     age: ages[getRandomInRange(0, ages.length - 1)],
     director: directors[getRandomInRange(0, directors.length - 1)],
@@ -86,7 +67,7 @@ const generateFilmCard = () => {
     poster: posters[getRandomInRange(0, posters.length - 1)],
     description: getNewArrayDescription(descriptions).join(` `),
     country: countries[getRandomInRange(0, countries.length - 1)],
-    comments: getNewArray(comments),
+    comments: generateComments(getRandomInRange(0, 3)),
     isFavorite: Math.random() > 0.5,
     isHistory: Math.random() > 0.5,
     isWatchlist: Math.random() > 0.5,

@@ -1,6 +1,5 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
-import {emojiNames} from "../const";
-import {formatTime, formatPopupDate, formatCommentDate} from "../utils/common";
+import {formatTime, formatPopupDate} from "../utils/common";
 
 const createGenresMarkup = (genres) => {
   return genres
@@ -12,66 +11,6 @@ const createGenresMarkup = (genres) => {
     .join(`\n`);
 };
 
-const createCommentsMarkup = (comments) => {
-  return comments
-    .map((comment) => {
-      const commentDate = formatCommentDate(comment.day);
-      return (
-        `<li class="film-details__comment">
-          <span class="film-details__comment-emoji">
-            <img src="./images/emoji/${comment.emoji}.png" width="55" height="55" alt="emoji-${comment.emoji}">
-          </span>
-          <div>
-            <p class="film-details__comment-text">${comment.text}</p>
-            <p class="film-details__comment-info">
-              <span class="film-details__comment-author">${comment.author}</span>
-              <span class="film-details__comment-day">${commentDate}</span>
-              <button class="film-details__comment-delete">Delete</button>
-            </p>
-          </div>
-        </li>`
-      );
-    })
-    .join(`\n`);
-};
-
-const createEmojiListMarkup = (names) => {
-  return names
-    .map((emojiName) => {
-      return (
-        `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emojiName}" value="${emojiName}">
-          <label class="film-details__emoji-label" for="emoji-${emojiName}">
-            <img src="./images/emoji/${emojiName}.png" width="30" height="30" alt="emoji">
-          </label>`
-      );
-    })
-    .join(`\n`);
-};
-
-const createCommentsWrapMarkup = (comments, commentsMarkup, emojiListMarkup) => {
-  return (
-    `<section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
-
-        <ul class="film-details__comments-list">
-          ${commentsMarkup}
-        </ul>
-
-        <div class="film-details__new-comment">
-          <div for="add-emoji" class="film-details__add-emoji-label"></div>
-
-          <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
-          </label>
-
-          <div class="film-details__emoji-list">
-            ${emojiListMarkup}
-          </div>
-        </div>
-      </section>`
-  );
-};
-
 const createButtonMarkup = (name, content, isChecked) => {
   return (
     `<input type="checkbox" class="film-details__control-input film-details__control-input--${name} visually-hidden" id="${name}" name="${name}" ${isChecked ? `checked` : ``}>
@@ -80,12 +19,9 @@ const createButtonMarkup = (name, content, isChecked) => {
 };
 
 const createFilmDetailsTemplate = (film) => {
-  const {poster, movieTitle, age, director, writers, actors, rating, date, duration, country, genreNames, description, comments} = film;
+  const {poster, movieTitle, age, director, writers, actors, rating, date, duration, country, genreNames, description} = film;
 
-  const commentsMarkup = createCommentsMarkup(comments);
   const genresMarkup = createGenresMarkup(genreNames);
-  const emojiListMarkup = createEmojiListMarkup(emojiNames);
-  const commentsWrapMarkup = createCommentsWrapMarkup(comments, commentsMarkup, emojiListMarkup);
   const genreTerm = genreNames.length > 1 ? `Genres` : `Genre`;
   const popupDate = formatPopupDate(date);
   const time = formatTime(duration);
@@ -165,9 +101,7 @@ const createFilmDetailsTemplate = (film) => {
       </section>
     </div>
 
-    <div class="form-details__bottom-container">
-      ${commentsWrapMarkup}
-    </div>
+    <div class="form-details__bottom-container"></div>
   </form>
   </section>`
   );
@@ -183,11 +117,25 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._historyHandler = null;
     this._favoritesHandler = null;
 
-    this._subscribeOnEvents();
+    // this._subscribeOnEvents();
   }
 
   getTemplate() {
     return createFilmDetailsTemplate(this._film);
+  }
+
+  get film() {
+    return this._film;
+  }
+
+  getData() {
+    const form = this.getElement().querySelector(`.film-details__inner`);
+    const formData = new FormData(form);
+
+    return {
+      emoji: formData.get(`comment-emoji`),
+      text: formData.get(`comment`)
+    };
   }
 
   recoveryListeners() {
@@ -197,28 +145,11 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.setFavoritesButtonClickHandler(this._favoritesHandler);
   }
 
-  rerender() {
-    super.rerender();
-  }
-
   closeButtonClickHandler(handler) {
     this.getElement().querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, handler);
 
     this._clickHandler = handler;
-  }
-
-  _subscribeOnEvents() {
-    const element = this.getElement();
-
-    const emojiElement = element.querySelector(`.film-details__add-emoji-label`);
-    element.querySelectorAll(`.film-details__emoji-label`)
-      .forEach((elem) => {
-        elem.addEventListener(`click`, () => {
-          const link = elem.querySelector(`img`).src;
-          emojiElement.innerHTML = `<img src=${link} width="55" height="55" alt="emoji">`;
-        });
-      });
   }
 
   setWatchlistButtonClickHandler(handler) {
@@ -237,5 +168,9 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.getElement().querySelector(`input#favorite`)
       .addEventListener(`click`, handler);
     this._favoritesHandler = handler;
+  }
+
+  getCommentsElement() {
+    return this.getElement().querySelector(`.form-details__bottom-container`);
   }
 }
