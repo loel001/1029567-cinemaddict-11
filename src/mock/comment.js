@@ -6,25 +6,21 @@ const startDateComment = new Date(2020, 1, 5).getTime();
 const finalDate = new Date(2020, 3, 27).getTime();
 
 const COMMENTS = [{
-  id: Number(Date.now()) + Math.random(),
   text: `Interesting setting and a good cast`,
   author: `Tim Macoveev`,
   emoji: `smile`,
   day: new Date(getRandomInRange(startDateComment, finalDate))
 }, {
-  id: Number(Date.now()) + Math.random(),
   text: `Booooooooooring`,
   author: `John Doe`,
   emoji: `sleeping`,
   day: new Date(getRandomInRange(startDateComment, finalDate))
 }, {
-  id: Number(Date.now()) + Math.random(),
   text: `Very very old. Meh`,
   author: `John Doe`,
   emoji: `puke`,
   day: new Date(getRandomInRange(startDateComment, finalDate))
 }, {
-  id: Number(Date.now()) + Math.random(),
   text: `Almost two hours? Seriously?`,
   author: `John Doe`,
   emoji: `angry`,

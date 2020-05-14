@@ -1,7 +1,6 @@
 import {render} from "../utils/render.js";
 import CommentsComponent from "../components/comments";
 import CommentController from "../controllers/comment";
-import {RenderPosition} from "../utils/render";
 
 
 export default class CommentsController {
@@ -23,13 +22,13 @@ export default class CommentsController {
         this._onCommentDataChange(null, this._container.getData());
       }
     });
-    render(this._container.getCommentsElement(), this._commentsComponent, RenderPosition.BEFOREEND);
+    render(this._container.getCommentsElement(), this._commentsComponent);
     this._renderComments();
   }
 
   _renderComments() {
     const film = this._container.film;
-    this._commentControllers = this._commentsModel.getComments(film).forEach((comment) => {
+    this._commentsModel.getComments(film).map((comment) => {
       new CommentController(this._commentsComponent, this._onCommentDataChange).render(comment);
     });
   }

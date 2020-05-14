@@ -1,5 +1,6 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {formatTime, formatPopupDate} from "../utils/common";
+import {encode} from "he";
 
 const createGenresMarkup = (genres) => {
   return genres
@@ -19,8 +20,9 @@ const createButtonMarkup = (name, content, isChecked) => {
 };
 
 const createFilmDetailsTemplate = (film) => {
-  const {poster, movieTitle, age, director, writers, actors, rating, date, duration, country, genreNames, description} = film;
+  const {poster, movieTitle, age, director, writers, actors, rating, date, duration, country, genreNames, currentDescription} = film;
 
+  const description = encode(currentDescription);
   const genresMarkup = createGenresMarkup(genreNames);
   const genreTerm = genreNames.length > 1 ? `Genres` : `Genre`;
   const popupDate = formatPopupDate(date);
@@ -116,8 +118,6 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._watchListHandler = null;
     this._historyHandler = null;
     this._favoritesHandler = null;
-
-    // this._subscribeOnEvents();
   }
 
   getTemplate() {
@@ -134,7 +134,7 @@ export default class FilmDetails extends AbstractSmartComponent {
 
     return {
       emoji: formData.get(`comment-emoji`),
-      text: formData.get(`comment`)
+      text: encode(formData.get(`comment`))
     };
   }
 

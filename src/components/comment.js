@@ -33,10 +33,10 @@ export default class Comment extends AbstractSmartComponent {
   }
 
   setDeleteButtonClickHandler(handler) {
-    this.getElement().querySelector(`.film-details__comment-delete`).addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-      handler();
-    });
+    this.getElement().querySelector(`.film-details__comment-delete`)
+      .addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        handler();
+      });
   }
 }
-

@@ -51,11 +51,15 @@ const posters = [`the-dance-of-life.jpg`, `sagebrush-trail.jpg`, `the-man-with-t
 const countries = [`USA`, `Russia`, `Australia`];
 const startDate = new Date(1920, 3, 5).getTime();
 const finalDate = new Date(2020, 3, 27).getTime();
-// const comments = generateComments(getRandomInRange(0, 3));
+
+const getId = () => {
+  return Number(Date.now()) + Math.random();
+};
 
 const generateFilmCard = () => {
+  const comments = generateComments(getRandomInRange(0, 3)).map((comment) => Object.assign({}, comment, {id: getId()}));
   return {
-    id: Number(Date.now()) + Math.random(),
+    id: getId(),
     movieTitle: movieTitles[getRandomInRange(0, movieTitles.length - 1)],
     age: ages[getRandomInRange(0, ages.length - 1)],
     director: directors[getRandomInRange(0, directors.length - 1)],
@@ -65,9 +69,9 @@ const generateFilmCard = () => {
     date: new Date(getRandomInRange(startDate, finalDate)),
     genreNames: getNewArray(popupGenres),
     poster: posters[getRandomInRange(0, posters.length - 1)],
-    description: getNewArrayDescription(descriptions).join(` `),
+    currentDescription: getNewArrayDescription(descriptions).join(` `),
     country: countries[getRandomInRange(0, countries.length - 1)],
-    comments: generateComments(getRandomInRange(0, 3)),
+    comments,
     isFavorite: Math.random() > 0.5,
     isHistory: Math.random() > 0.5,
     isWatchlist: Math.random() > 0.5,

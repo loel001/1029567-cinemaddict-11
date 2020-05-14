@@ -1,6 +1,6 @@
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
-import {render, replace, remove, RenderPosition} from "../utils/render";
+import {render, replace, remove} from "../utils/render";
 import CommentsController from "./comments";
 
 const bodySite = document.querySelector(`body`);
@@ -33,12 +33,12 @@ export default class FilmCardController {
       this._onViewChange();
       bodySite.appendChild(this._filmDetailsComponent.getElement());
       this._renderComments();
-      document.addEventListener(`keydown`, this._onEscKeyDown);
-      this._mode = Mode.EDIT;
       const popup = document.querySelectorAll(`.film-details`);
       if (popup.length > 1) {
         bodySite.removeChild(popup[0]);
       }
+      document.addEventListener(`keydown`, this._onEscKeyDown);
+      this._mode = Mode.EDIT;
     });
 
     this._filmCardComponent.setWatchlistButtonClickHandler(() => {
@@ -90,7 +90,7 @@ export default class FilmCardController {
       }
       document.addEventListener(`keydown`, this._onEscKeyDown);
     } else {
-      render(this._container, this._filmCardComponent, RenderPosition.BEFOREEND);
+      render(this._container, this._filmCardComponent);
     }
   }
 
@@ -120,6 +120,6 @@ export default class FilmCardController {
   }
 
   _renderComments() {
-    new CommentsController(this._filmDetailsComponent, this._commentsModel, this._onDataChange).render();
+    new CommentsController(this._filmDetailsComponent, this._commentsModel, this._onDataChange.bind(this, this)).render();
   }
 }

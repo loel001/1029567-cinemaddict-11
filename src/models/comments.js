@@ -18,9 +18,9 @@ export default class Comments {
     return this._comments.filter((comment) => comment.filmId === film.id);
   }
 
-  getCommentsAll() {
-    return this._comments;
-  }
+  // getCommentsAll() {
+  //   return this._comments;
+  // }
 
   removeComment(id) {
     const index = this._comments.findIndex((it) => it.id === id);

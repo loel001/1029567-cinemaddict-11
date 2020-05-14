@@ -69,7 +69,7 @@ export default class BoardController {
     const filmWrapper = container.querySelector(`.films-list`);
 
     if (this._filmCardsModel.getFilms().length === 0) {
-      render(filmWrapper, this._noFilmCards, RenderPosition.BEFOREEND);
+      render(filmWrapper, this._noFilmCards);
       return;
     }
 
@@ -79,11 +79,13 @@ export default class BoardController {
     // сортировка
     render(container, this._sortingComponent, RenderPosition.BEFOREBEGIN);
 
-    render(filmWrapper, this._filmCardsComponent, RenderPosition.BEFOREEND);
+    render(filmWrapper, this._filmCardsComponent);
 
     // карточки фильма
     this._renderFilmCards(films.slice(0, this._showingCards));
     this._renderSpecialFilmCards(films);
+
+    // кнопка показать больше
     this._renderLoadMoreButton();
   }
 
@@ -124,9 +126,9 @@ export default class BoardController {
       return;
     }
     const container = this._container.getElement();
-    // кнопка показать больше
+
     const filmWrapper = container.querySelector(`.films-list`);
-    render(filmWrapper, this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
+    render(filmWrapper, this._loadMoreButtonComponent);
 
     this._loadMoreButtonComponent.setClickHandler(this._onLoadMoreButtonClick);
   }
