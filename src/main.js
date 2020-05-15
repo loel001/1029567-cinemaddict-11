@@ -4,6 +4,7 @@ import FilterController from "./controllers/filter.js";
 import FilmCardsModel from "./models/film-cards";
 import CommentsModel from "./models/comments";
 import FooterComponent from "./components/footer";
+import StatisticComponent from "./components/statistics";
 import {generateFilmCards} from "./mock/film-card";
 import {render, RenderPosition} from "./utils/render";
 

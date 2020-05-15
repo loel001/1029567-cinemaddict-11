@@ -63,6 +63,16 @@ export default class BoardController {
     this._filmCardsModel.setFilterChangeHandler(this._onFilterChange);
   }
 
+  hide() {
+    this._container.hide();
+    this._sortingComponent.hide();
+  }
+
+  show() {
+    this._container.show();
+    this._sortingComponent.show();
+  }
+
   render() {
     const container = this._container.getElement();
     const films = this._filmCardsModel.getFilms();
