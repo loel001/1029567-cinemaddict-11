@@ -1,7 +1,6 @@
-import AbstractComponent from "./abstract-component.js";
 import {formatTime, formatDate} from "../utils/common";
 import {encode} from "he";
-import AbstractSmartComponent from "./abstract-smart-component";
+import AbstractComponent from "./abstract-component";
 
 const createButtonMarkup = (name, isActive) => {
   return (
@@ -45,7 +44,7 @@ const createFilmCardTemplate = (film) => {
   );
 };
 
-export default class FilmCard extends AbstractSmartComponent {
+export default class FilmCard extends AbstractComponent {
   constructor(film) {
     super();
 

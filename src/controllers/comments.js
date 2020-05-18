@@ -28,7 +28,7 @@ export default class CommentsController {
 
   _renderComments() {
     const film = this._container.film;
-    this._commentsModel.getComments(film).map((comment) => {
+    this._commentsModel.getComments(film).forEach((comment) => {
       new CommentController(this._commentsComponent, this._onCommentDataChange).render(comment);
     });
   }

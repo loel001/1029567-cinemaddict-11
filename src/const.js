@@ -14,4 +14,19 @@ const FilterType = {
   FAVORITES: `Favorites`,
 };
 
-export {emojiNames, FilterType};
+const NavigationItem = {
+  FILTER: `filter`,
+  STATISTIC: `statistic`,
+};
+
+const StatisticFilterType = {
+  ALL_TIME: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`
+};
+
+const StatisticFilterTypes = Object.values(StatisticFilterType);
+
+export {emojiNames, FilterType, StatisticFilterType, StatisticFilterTypes, NavigationItem};

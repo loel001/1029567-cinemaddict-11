@@ -1,5 +1,5 @@
 import {formatCommentDate} from "../utils/common";
-import AbstractSmartComponent from "./abstract-smart-component";
+import AbstractComponent from "./abstract-component.js";
 
 const createCommentTemplate = (comment) => {
   const {emoji, text, author, day} = comment;
@@ -21,7 +21,7 @@ const createCommentTemplate = (comment) => {
   );
 };
 
-export default class Comment extends AbstractSmartComponent {
+export default class Comment extends AbstractComponent {
   constructor(comment) {
     super();
 

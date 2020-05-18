@@ -1,4 +1,4 @@
-import AbstractSmartComponent from "./abstract-smart-component.js";
+import AbstractComponent from "./abstract-component";
 import {formatTime, formatPopupDate} from "../utils/common";
 import {encode} from "he";
 
@@ -109,7 +109,7 @@ const createFilmDetailsTemplate = (film) => {
   );
 };
 
-export default class FilmDetails extends AbstractSmartComponent {
+export default class FilmDetails extends AbstractComponent {
   constructor(film) {
     super();
 

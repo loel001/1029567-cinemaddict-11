@@ -50,6 +50,7 @@ export default class FilmCardController {
     this._filmCardComponent.setHistoryButtonClickHandler(() => {
       this._onDataChange(this, film, Object.assign({}, film, {
         isHistory: !film.isHistory,
+        watchingDate: new Date(),
       }));
     });
 
@@ -68,6 +69,7 @@ export default class FilmCardController {
     this._filmDetailsComponent.setHistoryButtonClickHandler(() => {
       this._onDataChange(this, film, Object.assign({}, film, {
         isHistory: !film.isHistory,
+        watchingDate: new Date(),
       }));
     });
 

@@ -4,9 +4,11 @@ import FilterController from "./controllers/filter.js";
 import FilmCardsModel from "./models/film-cards";
 import CommentsModel from "./models/comments";
 import FooterComponent from "./components/footer";
-import StatisticComponent from "./components/statistics";
+import StatisticComponent from "./components/statistic";
 import {generateFilmCards} from "./mock/film-card";
-import {render, RenderPosition} from "./utils/render";
+import {render} from "./utils/render";
+import {NavigationItem} from "./const.js";
+import NavigationComponent from "./components/navigation";
 
 const siteMain = document.querySelector(`.main`);
 
@@ -22,17 +24,36 @@ const commentsModel = new CommentsModel();
 commentsModel.setComments(films);
 const models = {filmCardsModel, commentsModel};
 
+const navigationComponent = new NavigationComponent();
+render(siteMain, navigationComponent);
+
 // фильтры
-const filterController = new FilterController(siteMain, filmCardsModel);
-// const filterController = new FilterController(siteMain, models);
+const filterController = new FilterController(navigationComponent, filmCardsModel);
 filterController.render();
 
 // основная разметка
 const boardComponent = new BoardComponent(films);
 const boardController = new BoardController(boardComponent, models);
-render(siteMain, boardComponent, RenderPosition.BEFOREEND);
+render(siteMain, boardComponent);
 boardController.render(films);
 
-// Подвал сайта
+// подвал
 const siteFooter = document.querySelector(`.footer__statistics`);
-render(siteFooter, new FooterComponent(films), RenderPosition.BEFOREEND);
+render(siteFooter, new FooterComponent(films));
+
+// статистика
+const statisticComponent = new StatisticComponent(filmCardsModel);
+render(siteMain, statisticComponent);
+statisticComponent.hide();
+
+// переключения
+navigationComponent.setClickHandler((item) => {
+  if (item === NavigationItem.FILTER) {
+    boardController.show();
+    boardController.resetSortType();
+    statisticComponent.hide();
+  } else {
+    boardController.hide();
+    statisticComponent.show();
+  }
+});

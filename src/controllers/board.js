@@ -201,4 +201,10 @@ export default class BoardController {
     this._renderSpecialFilmCards(this._filmCardsModel.getFilmsAll());
     this._renderLoadMoreButton();
   }
+
+  resetSortType() {
+    if (this._sortingComponent.getSortType(SortType.DEFAULT)) {
+      this._onSortTypeChange(SortType.DEFAULT);
+    }
+  }
 }

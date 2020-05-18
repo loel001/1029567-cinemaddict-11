@@ -50,7 +50,8 @@ const popupGenres = [`Drama`, `Film-Noir`, `Mystery`, `Drama`, `Film-Noir`, `Mys
 const posters = [`the-dance-of-life.jpg`, `sagebrush-trail.jpg`, `the-man-with-the-golden-arm.jpg`, `santa-claus-conquers-the-martians.jpg`, `popeye-meets-sinbad.png`];
 const countries = [`USA`, `Russia`, `Australia`];
 const startDate = new Date(1920, 3, 5).getTime();
-const finalDate = new Date(2020, 3, 27).getTime();
+const startSecondDate = new Date(2018, 3, 17).getTime();
+const finalDate = new Date(2020, 4, 17).getTime();
 
 const getId = () => {
   return Number(Date.now()) + Math.random();
@@ -58,6 +59,8 @@ const getId = () => {
 
 const generateFilmCard = () => {
   const comments = generateComments(getRandomInRange(0, 3)).map((comment) => Object.assign({}, comment, {id: getId()}));
+  const date = new Date(getRandomInRange(startSecondDate, finalDate));
+  const isHistory = Math.random() > 0.5;
   return {
     id: getId(),
     movieTitle: movieTitles[getRandomInRange(0, movieTitles.length - 1)],
@@ -73,9 +76,10 @@ const generateFilmCard = () => {
     country: countries[getRandomInRange(0, countries.length - 1)],
     comments,
     isFavorite: Math.random() > 0.5,
-    isHistory: Math.random() > 0.5,
+    isHistory,
     isWatchlist: Math.random() > 0.5,
     duration: getRandomInRange(60, 180),
+    watchingDate: isHistory ? date : null,
   };
 };
 
