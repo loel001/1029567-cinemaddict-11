@@ -20,7 +20,7 @@ const createButtonMarkup = (name, content, isChecked) => {
 };
 
 const createFilmDetailsTemplate = (film) => {
-  const {poster, movieTitle, age, director, writers, actors, rating, date, duration, country, genreNames, currentDescription} = film;
+  const {poster, movieTitle, alternativeTitle, age, director, writers, actors, rating, date, duration, country, genreNames, currentDescription} = film;
 
   const description = encode(currentDescription);
   const genresMarkup = createGenresMarkup(genreNames);
@@ -49,7 +49,7 @@ const createFilmDetailsTemplate = (film) => {
           <div class="film-details__info-head">
             <div class="film-details__title-wrap">
               <h3 class="film-details__title">${movieTitle}</h3>
-              <p class="film-details__title-original">Original: ${movieTitle}</p>
+              <p class="film-details__title-original">Original: ${alternativeTitle}</p>
             </div>
 
             <div class="film-details__rating">

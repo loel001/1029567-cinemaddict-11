@@ -1,27 +1,24 @@
+import API from "./api.js";
 import BoardComponent from "./components/board";
 import BoardController from "./controllers/board";
+import CommentsModel from "./models/comments";
 import FilterController from "./controllers/filter.js";
 import FilmCardsModel from "./models/film-cards";
-import CommentsModel from "./models/comments";
 import FooterComponent from "./components/footer";
-import StatisticComponent from "./components/statistic";
-import {generateFilmCards} from "./mock/film-card";
-import {render} from "./utils/render";
-import {NavigationItem} from "./const.js";
 import NavigationComponent from "./components/navigation";
+import StatisticComponent from "./components/statistic";
+import {NavigationItem} from "./const.js";
+import {render} from "./utils/render";
 
 const siteMain = document.querySelector(`.main`);
-
-const NUMBER_OF_FILMS = 17;
-const films = generateFilmCards(NUMBER_OF_FILMS);
+const AUTHORIZATION = `Basic ko0w110ik55555k`;
+const api = new API(AUTHORIZATION);
 
 // фильмы
 const filmCardsModel = new FilmCardsModel();
-filmCardsModel.setFilms(films);
 
 // комментарии
 const commentsModel = new CommentsModel();
-commentsModel.setComments(films);
 const models = {filmCardsModel, commentsModel};
 
 const navigationComponent = new NavigationComponent();
@@ -57,3 +54,13 @@ navigationComponent.setClickHandler((item) => {
     statisticComponent.show();
   }
 });
+
+api.getFilms()
+  .then((films) => {
+    filmCardsModel.setFilms(films);
+    // boardController.render();
+  })
+  .then((comments) => {
+    commentsModel.setComments(comments);
+    // boardController.render();
+  });
