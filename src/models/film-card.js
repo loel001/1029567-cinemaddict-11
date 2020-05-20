@@ -65,4 +65,8 @@ export default class FilmCard {
   static clone(data) {
     return new FilmCard(data.toRAW());
   }
+
+  removeComment(id) {
+    this.comments = this.comments.filter((it) => it !== id);
+  }
 }

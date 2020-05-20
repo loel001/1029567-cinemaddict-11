@@ -10,7 +10,8 @@ export default class CommentController {
   render(comment) {
     this._commentComponent = new CommentComponent(comment);
     this._commentComponent.setDeleteButtonClickHandler(() => {
-      this._onDataChange(comment, null);
+      // this._onDataChange(comment, null);
+      this._onDataChange(this, comment, null);
     });
 
     const containerElement = this._container.getCommentsListElement();

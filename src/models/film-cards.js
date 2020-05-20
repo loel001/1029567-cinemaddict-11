@@ -19,12 +19,7 @@ export default class FilmCards {
   }
 
   setFilms(films) {
-    this._films = [];
-    films.forEach((film) => {
-      const _film = Object.assign({}, film, {commentsCount: film.comments.length});
-      delete _film.comments;
-      this._films.push(_film);
-    });
+    this._films = Array.from(films);
     this._callHandlers(this._dataChangeHandlers);
   }
 

@@ -11,9 +11,9 @@ const SHOWING_CARDS_COUNT_BY_BUTTON = 5;
 const NUMBER_OF_CARDS = 2;
 const siteHeader = document.querySelector(`.profile`);
 
-const renderFilmCards = (filmListElement, films, comments, onDataChange, onViewChange) => {
+const renderFilmCards = (filmListElement, films, comments, api, onDataChange, onViewChange) => {
   return films.map((film) => {
-    const filmCardController = new FilmCardController(filmListElement, comments, onDataChange, onViewChange);
+    const filmCardController = new FilmCardController(filmListElement, comments, api, onDataChange, onViewChange);
 
     filmCardController.render(film);
 
@@ -40,10 +40,11 @@ const getSortedFilms = (films, sortType, from, to) => {
 };
 
 export default class BoardController {
-  constructor(container, models) {
+  constructor(container, models, api) {
     this._container = container;
     this._filmCardsModel = models.filmCardsModel;
     this._commentsModel = models.commentsModel;
+    this._api = api;
 
     this._showedFilmCardControllers = [];
     this._showingCards = TOTAL_NUMBER_OF_CARDS;
@@ -106,7 +107,7 @@ export default class BoardController {
 
   _renderFilmCards(films) {
     const filmListElement = this._filmCardsComponent.getElement();
-    const newFilmCards = renderFilmCards(filmListElement, films, this._commentsModel, this._onDataChange, this._onViewChange);
+    const newFilmCards = renderFilmCards(filmListElement, films, this._commentsModel, this._api, this._onDataChange, this._onViewChange);
     this._showedFilmCardControllers = this._showedFilmCardControllers.concat(newFilmCards);
   }
 
@@ -123,10 +124,10 @@ export default class BoardController {
     const topRatedFilms = films.slice(0).sort((a, b) => b.rating - a.rating).slice(0, NUMBER_OF_CARDS);
     const mostCommentedFilms = films.slice(0).sort((a, b) => b.commentsCount - a.commentsCount).slice(0, NUMBER_OF_CARDS);
 
-    const topRatedFilmCards = renderFilmCards(cardTopRatedWrappers[0], topRatedFilms, this._commentsModel, this._onDataChange, this._onViewChange);
+    const topRatedFilmCards = renderFilmCards(cardTopRatedWrappers[0], topRatedFilms, this._commentsModel, this._api, this._onDataChange, this._onViewChange);
     this._showedFilmCardControllers = this._showedFilmCardControllers.concat(topRatedFilmCards);
 
-    const mostCommentedFilmCards = renderFilmCards(cardTopRatedWrappers[1], mostCommentedFilms, this._commentsModel, this._onDataChange, this._onViewChange);
+    const mostCommentedFilmCards = renderFilmCards(cardTopRatedWrappers[1], mostCommentedFilms, this._commentsModel, this._api, this._onDataChange, this._onViewChange);
     this._showedFilmCardControllers = this._showedFilmCardControllers.concat(mostCommentedFilmCards);
   }
 
@@ -144,18 +145,17 @@ export default class BoardController {
   }
 
   _onDataChange(filmCardController, oldData, newData) {
-    const isSuccess = this._filmCardsModel.updateFilm(oldData.id, newData);
-    if (isSuccess) {
-      if (document.querySelector(`body`).contains(document.querySelector(`.film-details`))) {
-        filmCardController.render(newData);
-        this._updateFilms(this._showingCards);
-      } else {
-        this._updateFilms(this._showingCards);
-      }
-      remove(this._siteProfileComponent);
-      this._siteProfileComponent = new SiteProfileComponent(this._filmCardsModel.getFilmsAll());
-      render(siteHeader, this._siteProfileComponent, RenderPosition.BEFOREBEGIN);
-    }
+    this._api.updateFilm(oldData.id, newData)
+      .then((filmCardModel) => {
+        const isSuccess = this._filmCardsModel.updateFilm(oldData.id, filmCardModel);
+        if (isSuccess) {
+          filmCardController.render(filmCardModel);
+          this._updateFilms(this._showingCards);
+          remove(this._siteProfileComponent);
+          this._siteProfileComponent = new SiteProfileComponent(this._filmCardsModel.getFilmsAll());
+          render(siteHeader, this._siteProfileComponent, RenderPosition.BEFOREBEGIN);
+        }
+      });
   }
 
   _onViewChange() {

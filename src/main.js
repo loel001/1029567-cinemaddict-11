@@ -11,8 +11,9 @@ import {NavigationItem} from "./const.js";
 import {render} from "./utils/render";
 
 const siteMain = document.querySelector(`.main`);
-const AUTHORIZATION = `Basic ko0w110ik55555k`;
-const api = new API(AUTHORIZATION);
+const AUTHORIZATION = `Basic ko0w110ik55555=`;
+const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
+const api = new API(END_POINT, AUTHORIZATION);
 
 // фильмы
 const filmCardsModel = new FilmCardsModel();
@@ -29,14 +30,13 @@ const filterController = new FilterController(navigationComponent, filmCardsMode
 filterController.render();
 
 // основная разметка
-const boardComponent = new BoardComponent(films);
-const boardController = new BoardController(boardComponent, models);
+const boardComponent = new BoardComponent();
+const boardController = new BoardController(boardComponent, models, api);
 render(siteMain, boardComponent);
-boardController.render(films);
+// boardController.render(films);
 
 // подвал
 const siteFooter = document.querySelector(`.footer__statistics`);
-render(siteFooter, new FooterComponent(films));
 
 // статистика
 const statisticComponent = new StatisticComponent(filmCardsModel);
@@ -58,9 +58,15 @@ navigationComponent.setClickHandler((item) => {
 api.getFilms()
   .then((films) => {
     filmCardsModel.setFilms(films);
-    // boardController.render();
+    render(siteFooter, new FooterComponent(films));
+    return Promise.all(filmCardsModel.getFilmsAll().map((film) => api.getComments(film)));
   })
   .then((comments) => {
     commentsModel.setComments(comments);
-    // boardController.render();
+  })
+  .catch(() => {
+    filmCardsModel.setFilms([]);
+  })
+  .finally(() => {
+    boardController.render();
   });

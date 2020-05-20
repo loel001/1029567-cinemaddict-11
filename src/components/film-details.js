@@ -40,7 +40,7 @@ const createFilmDetailsTemplate = (film) => {
       </div>
       <div class="film-details__info-wrap">
         <div class="film-details__poster">
-          <img class="film-details__poster-img" src="./images/posters/${poster}" alt="${movieTitle}">
+          <img class="film-details__poster-img" src="${poster}" alt="${movieTitle}">
 
           <p class="film-details__age">${age}+</p>
         </div>
@@ -64,11 +64,11 @@ const createFilmDetailsTemplate = (film) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">${writers}</td>
+              <td class="film-details__cell">${writers.join(`, `)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">${actors}</td>
+              <td class="film-details__cell">${actors.join(`, `)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
@@ -130,12 +130,7 @@ export default class FilmDetails extends AbstractComponent {
 
   getData() {
     const form = this.getElement().querySelector(`.film-details__inner`);
-    const formData = new FormData(form);
-
-    return {
-      emoji: formData.get(`comment-emoji`),
-      text: encode(formData.get(`comment`))
-    };
+    return new FormData(form);
   }
 
   recoveryListeners() {
