@@ -44,7 +44,7 @@ const API = class {
       .then((response) => response.json())
       .then((data) => {
         return {
-          film: FilmCard.parseFilmCard(data.movie),
+          ids: data.movie.comments,
           models: Comment.parseComments(data.comments, filmId)
         };
       });
@@ -61,6 +61,7 @@ const API = class {
       body: JSON.stringify(data.toRAW()),
       headers: new Headers({"Content-Type": `application/json`}),
     })
+      .then(checkStatus)
       .then((response) => response.json())
       .then(FilmCard.parseFilmCard);
   }

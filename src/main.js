@@ -11,8 +11,8 @@ import {NavigationItem} from "./const.js";
 import {render} from "./utils/render";
 
 const siteMain = document.querySelector(`.main`);
-const AUTHORIZATION = `Basic ko0w110ik55555=`;
 const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
+const AUTHORIZATION = `Basic 001g590ik29889a=`;
 const api = new API(END_POINT, AUTHORIZATION);
 
 // фильмы
@@ -31,8 +31,8 @@ filterController.render();
 
 // основная разметка
 const boardComponent = new BoardComponent();
-const boardController = new BoardController(boardComponent, models, api);
 render(siteMain, boardComponent);
+const boardController = new BoardController(boardComponent, models, api);
 // boardController.render(films);
 
 // подвал

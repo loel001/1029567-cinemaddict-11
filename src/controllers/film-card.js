@@ -12,9 +12,10 @@ const Mode = {
 };
 
 export default class FilmCardController {
-  constructor(container, commentsModel, onDataChange, onViewChange) {
+  constructor(container, commentsModel, api, onDataChange, onViewChange) {
     this._container = container;
     this._commentsModel = commentsModel;
+    this._api = api;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
     this._mode = Mode.DEFAULT;
@@ -129,6 +130,6 @@ export default class FilmCardController {
   }
 
   _renderComments() {
-    new CommentsController(this._filmDetailsComponent, this._commentsModel, this._onDataChange.bind(this, this)).render();
+    new CommentsController(this._filmDetailsComponent, this._commentsModel, this._api, this._onDataChange.bind(this, this)).render();
   }
 }

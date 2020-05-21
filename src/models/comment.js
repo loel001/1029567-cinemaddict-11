@@ -1,7 +1,6 @@
 export default class Comment {
   constructor(data, filmId) {
     this.filmId = filmId;
-
     this.id = data[`id`];
     this.author = data[`author`];
     this.text = data[`comment`];
@@ -25,9 +24,5 @@ export default class Comment {
     return data.map((rawComment) => {
       return Comment.parseComment(rawComment, filmId);
     });
-  }
-
-  static clone(data) {
-    return new Comment(data.toRAW(), data.filmId);
   }
 }

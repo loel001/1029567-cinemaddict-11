@@ -32,7 +32,7 @@ export default class CommentsController {
     this._commentsComponent.setCtrlEnterKeyDownHandler((evt) => {
       if ((evt.key === `Enter`) && (evt.ctrlKey || evt.metaKey)) {
         const commentModel = parseFormData(this._container.getData());
-        this._onCommentDataChange(null, commentModel);
+        this._onCommentDataChange(this, null, commentModel);
       }
     });
     render(this._container.getCommentsElement(), this._commentsComponent);
@@ -41,6 +41,8 @@ export default class CommentsController {
 
   _renderComments() {
     const film = this._container.film;
+    console.log(film);
+    console.log(this._commentsModel);
     this._commentsModel.getComments(film).forEach((comment) => {
       new CommentController(this._commentsComponent, this._onCommentDataChange).render(comment);
     });

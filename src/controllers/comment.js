@@ -5,6 +5,8 @@ export default class CommentController {
   constructor(container, onDataChange) {
     this._container = container;
     this._onDataChange = onDataChange;
+
+    this._commentComponent = null;
   }
 
   render(comment) {
