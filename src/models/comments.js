@@ -1,6 +1,8 @@
 export default class Comments {
   constructor() {
     this._comments = [];
+
+    this._dataChangeHandlers = [];
   }
 
   setComments(comments) {
@@ -19,6 +21,7 @@ export default class Comments {
     }
 
     this._comments = [].concat(this._comments.slice(0, index), this._comments.slice(index + 1));
+    this._callHandlers(this._dataChangeHandlers);
 
     return true;
   }
@@ -26,6 +29,7 @@ export default class Comments {
   updateComments(comments, filmId) {
     this._comments = this._comments.filter((comment) => comment.filmId !== filmId);
     this._comments = [].concat(this._comments, comments);
+    this._callHandlers(this._dataChangeHandlers);
   }
 
   _callHandlers(handlers) {

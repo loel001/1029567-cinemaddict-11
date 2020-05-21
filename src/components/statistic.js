@@ -136,14 +136,14 @@ const createStatisticsTemplate = (statistic, currentType) => {
 
   const filterTypesMarkup = StatisticFilterTypes.map((type) => createTypeFilterMarkup(type, currentType)).join(`\n`);
 
-  // const userName = document.querySelector(`.profile__rating`).textContent;
+  const userName = document.querySelector(`.profile__rating`).textContent;
 
   return (
     `<section class="statistic">
       <p class="statistic__rank">
         Your rank
         <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-        <span class="statistic__rank-label">${1}</span>
+        <span class="statistic__rank-label">${userName}</span>
       </p>
       <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
         <p class="statistic__filters-description">Show stats:</p>

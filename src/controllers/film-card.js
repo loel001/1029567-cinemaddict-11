@@ -130,6 +130,6 @@ export default class FilmCardController {
   }
 
   _renderComments() {
-    new CommentsController(this._filmDetailsComponent, this._commentsModel, this._api, this._onDataChange.bind(this, this)).render();
+    new CommentsController(this._filmDetailsComponent, this._api, this._commentsModel, this._onDataChange.bind(this, this)).render();
   }
 }

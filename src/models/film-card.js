@@ -20,8 +20,8 @@ export default class FilmCard {
     this.currentDescription = filmInfo[`description`] || ``;
     this.isWatchlist = Boolean(userDetails[`watchlist`]);
     this.isHistory = Boolean(userDetails[`already_watched`]);
-    this.isFavorite = Boolean(userDetails[`favorite`]);
     this.watchingDate = userDetails[`watching_date`] ? new Date(userDetails[`watching_date`]) : null;
+    this.isFavorite = Boolean(userDetails[`favorite`]);
   }
 
   toRAW() {
@@ -43,7 +43,7 @@ export default class FilmCard {
         },
         "runtime": this.duration,
         "genre": [...this.genreNames],
-        "description": this.duration
+        "description": this.currentDescription
       },
       "user_details": {
         "watchlist": this.isWatchlist,

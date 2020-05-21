@@ -5,55 +5,36 @@ import CommentsModel from "./models/comments";
 import FilterController from "./controllers/filter.js";
 import FilmCardsModel from "./models/film-cards";
 import FooterComponent from "./components/footer";
+import LoadingComponent from "./components/loading";
 import NavigationComponent from "./components/navigation";
 import StatisticComponent from "./components/statistic";
 import {NavigationItem} from "./const.js";
-import {render} from "./utils/render";
+import {render, remove} from "./utils/render";
 
 const siteMain = document.querySelector(`.main`);
 const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
-const AUTHORIZATION = `Basic 001g590ik29889a=`;
+const AUTHORIZATION = `Basic 321g59aaa30303a=`;
 const api = new API(END_POINT, AUTHORIZATION);
 
-// фильмы
 const filmCardsModel = new FilmCardsModel();
 
-// комментарии
 const commentsModel = new CommentsModel();
 const models = {filmCardsModel, commentsModel};
 
 const navigationComponent = new NavigationComponent();
 render(siteMain, navigationComponent);
 
-// фильтры
 const filterController = new FilterController(navigationComponent, filmCardsModel);
 filterController.render();
 
-// основная разметка
+const loadingComponent = new LoadingComponent();
+render(siteMain, loadingComponent);
+
+
 const boardComponent = new BoardComponent();
-render(siteMain, boardComponent);
 const boardController = new BoardController(boardComponent, models, api);
-// boardController.render(films);
 
-// подвал
 const siteFooter = document.querySelector(`.footer__statistics`);
-
-// статистика
-const statisticComponent = new StatisticComponent(filmCardsModel);
-render(siteMain, statisticComponent);
-statisticComponent.hide();
-
-// переключения
-navigationComponent.setClickHandler((item) => {
-  if (item === NavigationItem.FILTER) {
-    boardController.show();
-    boardController.resetSortType();
-    statisticComponent.hide();
-  } else {
-    boardController.hide();
-    statisticComponent.show();
-  }
-});
 
 api.getFilms()
   .then((films) => {
@@ -68,5 +49,21 @@ api.getFilms()
     filmCardsModel.setFilms([]);
   })
   .finally(() => {
+    remove(loadingComponent);
+    render(siteMain, boardComponent);
     boardController.render();
+    const statisticComponent = new StatisticComponent(filmCardsModel);
+    render(siteMain, statisticComponent);
+    statisticComponent.hide();
+
+    navigationComponent.setClickHandler((item) => {
+      if (item === NavigationItem.FILTER) {
+        boardController.show();
+        boardController.resetSortType();
+        statisticComponent.hide();
+      } else {
+        boardController.hide();
+        statisticComponent.show();
+      }
+    });
   });

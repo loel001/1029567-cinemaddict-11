@@ -52,7 +52,7 @@ export default class BoardController {
     this._sortingComponent = new SortingComponent();
     this._filmCardsComponent = new FilmCardsComponent();
     this._loadMoreButtonComponent = new LoadMoreButtonComponent();
-    this._siteProfileComponent = new SiteProfileComponent(this._filmCardsModel.getFilmsAll());
+    // this._siteProfileComponent = new SiteProfileComponent(films);
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
@@ -84,20 +84,20 @@ export default class BoardController {
       return;
     }
 
-    // профайл
+    this._renderProfile();
     render(siteHeader, this._siteProfileComponent, RenderPosition.BEFOREBEGIN);
 
-    // сортировка
     render(container, this._sortingComponent, RenderPosition.BEFOREBEGIN);
 
     render(filmWrapper, this._filmCardsComponent);
 
-    // карточки фильма
     this._renderFilmCards(films.slice(0, this._showingCards));
     this._renderSpecialFilmCards(films);
-
-    // кнопка показать больше
     this._renderLoadMoreButton();
+  }
+
+  _renderProfile() {
+    this._siteProfileComponent = new SiteProfileComponent(this._filmCardsModel.getFilmsAll());
   }
 
   _removeFilmCards() {
