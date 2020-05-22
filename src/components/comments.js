@@ -54,6 +54,14 @@ export default class FilmDetails extends AbstractComponent {
     return this.getElement().querySelector(`.film-details__comments-list`);
   }
 
+  getNewCommentElement() {
+    return this.getElement().querySelector(`.film-details__new-comment`);
+  }
+
+  getCommentTextElement() {
+    return this.getElement().querySelector(`.film-details__comment-input`);
+  }
+
   setCtrlEnterKeyDownHandler(handler) {
     this.getElement().querySelector(`.film-details__comment-input`)
       .addEventListener(`keydown`, handler);

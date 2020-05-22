@@ -29,4 +29,6 @@ const StatisticFilterType = {
 
 const StatisticFilterTypes = Object.values(StatisticFilterType);
 
-export {emojiNames, FilterType, StatisticFilterType, StatisticFilterTypes, NavigationItem};
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
+export {emojiNames, FilterType, StatisticFilterType, StatisticFilterTypes, NavigationItem, SHAKE_ANIMATION_TIMEOUT};

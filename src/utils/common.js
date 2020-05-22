@@ -1,21 +1,21 @@
 import moment from "moment";
 
-export const formatTime = (date) => {
+const formatTime = (date) => {
   const duration = moment.duration(date, `minutes`);
   const hours = duration.hours();
   const minutes = duration.minutes();
   return `${hours}` + `h` + ` ` + `${minutes}` + `m`;
 };
 
-export const formatDate = (date) => {
+const formatDate = (date) => {
   return moment(date).format(`YYYY`);
 };
 
-export const formatPopupDate = (date) => {
+const formatPopupDate = (date) => {
   return moment(date).format(`DD MMMM YYYY`);
 };
 
-export const formatCommentDate = (date) => {
+const formatCommentDate = (date) => {
   const difference = moment().diff(date, `days`);
   const differenceMinute = moment().diff(date, `minutes`);
   if (differenceMinute < 1440) {
@@ -29,13 +29,15 @@ export const formatCommentDate = (date) => {
   return moment(date).format(`DD/MM/YYYY hh:mm`);
 };
 
-export const isSelectedType = (dateA, dateB, type) => {
+const isSelectedType = (dateA, dateB, type) => {
   if (type === null) {
     return true;
   }
   return moment(dateA).diff(moment(dateB), type) === 0;
 };
 
-export const getDuration = (time) => {
+const getDuration = (time) => {
   return moment.duration(time, `minutes`);
 };
+
+export {formatTime, formatDate, formatPopupDate, formatCommentDate, isSelectedType, getDuration};

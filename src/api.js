@@ -61,7 +61,6 @@ const API = class {
       body: JSON.stringify(data.toRAW()),
       headers: new Headers({"Content-Type": `application/json`}),
     })
-      .then(checkStatus)
       .then((response) => response.json())
       .then(FilmCard.parseFilmCard);
   }

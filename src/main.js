@@ -13,7 +13,7 @@ import {render, remove} from "./utils/render";
 
 const siteMain = document.querySelector(`.main`);
 const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
-const AUTHORIZATION = `Basic 321g59aaa30303a=`;
+const AUTHORIZATION = `Basic 600g59aaa30303a=`;
 const api = new API(END_POINT, AUTHORIZATION);
 
 const filmCardsModel = new FilmCardsModel();
@@ -44,9 +44,6 @@ api.getFilms()
   })
   .then((comments) => {
     commentsModel.setComments(comments);
-  })
-  .catch(() => {
-    filmCardsModel.setFilms([]);
   })
   .finally(() => {
     remove(loadingComponent);

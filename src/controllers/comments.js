@@ -3,6 +3,7 @@ import CommentsComponent from "../components/comments";
 import CommentController from "../controllers/comment";
 import CommentModel from "../models/comment";
 import FilmCardModel from "../models/film-card";
+import {SHAKE_ANIMATION_TIMEOUT} from "../const";
 
 const parseFormData = (formData) => {
   return new CommentModel({
@@ -31,12 +32,25 @@ export default class CommentsController {
 
     this._commentsComponent.setCtrlEnterKeyDownHandler((evt) => {
       if ((evt.key === `Enter`) && (evt.ctrlKey || evt.metaKey)) {
+        if (this._commentsComponent.getCommentTextElement().classList.contains(`error`)) {
+          this._commentsComponent.getCommentTextElement().classList.remove(`error`);
+        }
         const commentModel = parseFormData(this._container.getData());
-        this._onCommentDataChange(null, commentModel);
+        this._commentsComponent.getCommentTextElement().setAttribute(`disabled`, `true`);
+        this._onCommentDataChange(this, null, commentModel);
       }
     });
     render(this._container.getCommentsElement(), this._commentsComponent);
     this._renderComments();
+  }
+
+  shake() {
+    this._commentsComponent.getNewCommentElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    this._commentsComponent.getCommentTextElement().classList.add(`error`);
+    this._commentsComponent.getCommentTextElement().removeAttribute(`disabled`);
+    setTimeout(() => {
+      this._commentsComponent.getNewCommentElement().style.animation = ``;
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
   _renderComments() {
@@ -46,7 +60,7 @@ export default class CommentsController {
     });
   }
 
-  _onCommentDataChange(oldData, newData) {
+  _onCommentDataChange(controller, oldData, newData) {
     const film = this._container.film;
     const newFilmCard = FilmCardModel.clone(film);
     if (newData === null) {
@@ -56,6 +70,9 @@ export default class CommentsController {
             newFilmCard.removeComment(oldData.id);
             this._onDataChange(film, newFilmCard);
           }
+        })
+        .catch(() => {
+          controller.shake();
         });
     } else if (oldData === null) {
       this._api.createComment(newData, film.id)
@@ -63,6 +80,9 @@ export default class CommentsController {
           this._commentsModel.updateComments(result.models, film.id);
           newFilmCard.comments = result.ids;
           this._onDataChange(film, newFilmCard);
+        })
+        .catch(() => {
+          controller.shake();
         });
     }
   }

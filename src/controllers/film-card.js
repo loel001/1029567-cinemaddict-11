@@ -34,6 +34,7 @@ export default class FilmCardController {
     this._filmCardComponent.setEditButtonsClickHandler(() => {
       this._onViewChange();
       bodySite.appendChild(this._filmDetailsComponent.getElement());
+      bodySite.classList.add(`hide-overflow`);
       this._renderComments();
       const popup = document.querySelectorAll(`.film-details`);
       if (popup.length > 1) {
@@ -98,7 +99,6 @@ export default class FilmCardController {
       if (this._mode === Mode.EDIT) {
         this._renderComments();
       }
-      document.addEventListener(`keydown`, this._onEscKeyDown);
     } else {
       render(this._container, this._filmCardComponent);
     }
@@ -112,11 +112,11 @@ export default class FilmCardController {
 
   destroy() {
     remove(this._filmCardComponent);
-    document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
   _closeFilmCard() {
     bodySite.removeChild(this._filmDetailsComponent.getElement());
+    bodySite.classList.remove(`hide-overflow`);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
     this._mode = Mode.DEFAULT;
   }
