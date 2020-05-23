@@ -1,6 +1,11 @@
 import FilmCard from "./models/film-card";
 import Comment from "./models/comment";
 
+const Status = {
+  SUCCESS: 200,
+  ERROR: 300
+};
+
 const Method = {
   GET: `GET`,
   POST: `POST`,
@@ -9,7 +14,7 @@ const Method = {
 };
 
 const checkStatus = (response) => {
-  if (response.status >= 200 && response.status < 300) {
+  if (response.status >= Status.SUCCESS && response.status < Status.ERROR) {
     return response;
   } else {
     throw new Error(`${response.status}: ${response.statusText}`);
